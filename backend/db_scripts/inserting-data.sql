@@ -1,6 +1,7 @@
 -- we don't need to specify the `id` column bc it is serial 
 -- so it will auto-increment
 INSERT INTO platform.topics (topic) VALUES ('new topic');
+INSERT INTO platform.topics (topic) VALUES ('neoliberalism');
 
 
 INSERT INTO platform.terms (term) VALUES ('new term');
