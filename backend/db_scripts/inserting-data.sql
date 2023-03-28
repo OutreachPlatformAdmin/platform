@@ -18,5 +18,8 @@ INSERT INTO platform.terms_to_topics (term_id, topic_id) VALUES (1, 1),
 INSERT INTO platform.terms_to_topics (term_id, topic_id) VALUES (3, 2);
 
 
-
 INSERT INTO platform.questions (question, topic_id) VALUES ('question about new topic', 1);
+
+INSERT INTO platform.related_topics (parent_id, child_id) VALUES (1, 2);
+
+INSERT INTO platform.articles (title, author, publish_date) VALUES ('title1', 'author1', '2023-03-27');
