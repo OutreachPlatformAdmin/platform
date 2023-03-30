@@ -26,7 +26,9 @@ To see documentation for the Rust crates used in this project:
 # Docker / Postgres Setup
 
 within the `database/` directory there is an `init.sql` file which contains the SQL to create  
-the `platform` db and schema. It also contains some insert statements to insert sample data. 
+the `platform` db and schema. It also contains some insert statements to insert sample data.
+
+There's also a `.env` file in `backend/crm_api` that can be used to set environment variables for the docker container that is not checked in to git. It's recommended to set the `POSTGRES_PASSWORD` environment variable there.
 
 Start up the docker container which will create a docker container running a postgres instance
 ```
