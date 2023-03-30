@@ -23,3 +23,7 @@ INSERT INTO platform.questions (question, topic_id) VALUES ('question about new 
 INSERT INTO platform.related_topics (parent_id, child_id) VALUES (1, 2);
 
 INSERT INTO platform.articles (title, author, publish_date) VALUES ('title1', 'author1', '2023-03-27');
+
+INSERT INTO platform.articles_to_topics VALUES (1, 2);
+INSERT INTO platform.articles_to_terms VALUES (1,1), (1,3);
+INSERT INTO platform.articles_to_questions VALUES (1,1);
