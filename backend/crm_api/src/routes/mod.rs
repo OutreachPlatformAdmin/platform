@@ -3,8 +3,10 @@ This file creates the routes.
 */
 
  mod hello_world;
+ mod get_topics;
  use axum::{
-    // what does FromRef do?
+    // imports both the FromRef trait and derive macro
+     extract::FromRequest,
      extract::FromRef,
      routing::get,
      Router,

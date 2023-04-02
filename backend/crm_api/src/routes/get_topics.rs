@@ -27,7 +27,7 @@ pub async fn get_all_topics_handler(
 ) -> Json<Vec<Topic>> {
 
     let topics = get_all_topics(&db_pool).await.unwrap();
-    Ok(Json(topic_result))
+    Json(topics)
 }
 
 pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
