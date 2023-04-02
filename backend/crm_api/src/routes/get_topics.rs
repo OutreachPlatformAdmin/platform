@@ -1,25 +1,14 @@
 use axum::{
-    extract::{Path, Query, State},
-    http::StatusCode,
     Extension, Json,
 };
 use serde::{Deserialize, Serialize};
-use sqlx::{PgRow, PgPool, FromRow, Result};
+use sqlx::{PgPool, FromRow, Result};
 
 
-#[derive(Serialize, Deserialize)]
-struct Topic {
+#[derive(Serialize, Deserialize, FromRow)]
+pub struct Topic {
     id: i64, 
     topic: String,
-}
-
-impl FromRow<PgRow> for Topic {
-    fn from_row(row: &PgRow) -> Result<Self> {
-        Ok(Topic {
-            id: row.try_get("id")?,
-            topic: row.try_get("topic")?,
-        })
-    }
 }
 
 pub async fn get_all_topics_handler(
