@@ -4,7 +4,7 @@ use routes::create_routes;
 use sqlx::postgres::PgPoolOptions;
 
 pub async fn run(db_uri: &str) {
-    // TODO: replace unwrap with ? and handle potential error response from Result<>
+    // TODO: replace unwrap with `?` and handle potential error response from Result<>
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(db_uri)
