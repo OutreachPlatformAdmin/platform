@@ -7,5 +7,5 @@ use std::env;
 async fn main() {
     dotenv().ok();
     let db_uri = env::var("DB_URI").unwrap();
-    run().await
+    run(&db_uri).await
 }

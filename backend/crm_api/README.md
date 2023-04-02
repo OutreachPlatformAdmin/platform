@@ -11,7 +11,7 @@ crates:
 cargo add axum 
 cargo add tokio
 cargo add tokio -F macros -F rt-multi-thread
-cargo add sqlx -F runtime-tokio-rustls
+cargo add sqlx -F runtime-tokio-rustls postgres
 cargo add serde
 cargo add serde -F derive
 ```

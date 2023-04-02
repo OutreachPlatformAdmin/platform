@@ -6,7 +6,7 @@ use routes::create_routes;
 use sqlx::postgres::PgPoolOptions;
 
 
- pub async fn run(db_uri: &str) {
+ pub async fn run(db_uri: &str) -> Result<(), sqlx::Error> {
 
     let pool = PgPoolOptions::new()
         .max_connections(5)
@@ -25,7 +25,7 @@ use sqlx::postgres::PgPoolOptions;
     // create DB connection pool
     // wait this has to be available in the handlers 
     // so maybe I can't define this here.
-
-
-
+    
+    // expected enum `Result`, found `()`
+    Ok(())
  }
