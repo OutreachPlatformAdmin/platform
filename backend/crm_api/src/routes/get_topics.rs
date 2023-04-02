@@ -1,5 +1,5 @@
 use axum::{
-    Extension, Json,
+    Json, extract::State
 };
 use serde::{Deserialize, Serialize};
 use sqlx::{PgPool, FromRow, Result};
@@ -7,12 +7,12 @@ use sqlx::{PgPool, FromRow, Result};
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Topic {
-    id: i64, 
+    id: i32, 
     topic: String,
 }
 
 pub async fn get_all_topics_handler(
-    Extension(db_pool): Extension<PgPool>
+    State(db_pool): State<PgPool>
 ) -> Json<Vec<Topic>> {
 
     let topics = get_all_topics(&db_pool).await.unwrap();
