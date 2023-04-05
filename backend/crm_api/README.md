@@ -6,22 +6,25 @@
 
 # Rust / Axum Setup
 
-crates:
-```
-cargo add axum 
-cargo add tokio
-cargo add tokio -F macros -F rt-multi-thread
-cargo add sqlx -F runtime-tokio-rustls
-cargo add serde
-cargo add serde -F derive
-```
-
 To see documentation for the Rust crates used in this project: 
 ```
 > cargo doc --open
 ```
 
+To start the Axum server such that it will refresh with each saved code change:
+```
+cargo watch -x run
+```
 
+
+### Environment Variables 
+
+all environment variables are stored in `crm_api/.env`
+
+```
+POSTGRES_PASSWORD=<password>
+DB_URI="postgresql://<username>:<password>@localhost:<port>/<database_name>"
+```
 
 # Docker / Postgres Setup
 
