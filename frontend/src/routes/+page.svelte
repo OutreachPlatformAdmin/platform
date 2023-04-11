@@ -56,11 +56,11 @@
 				Would taxing the richest handful of billionaires solve anything?
 			</h2>
 			<h3 class="indent-10">
-				It's almost impossible to visualize a billion dollars, let along a several trillion dollars,
-				the net wealth of around a dozen or so billionaires. Scroll to the right in the below
-				graphic to better understand just how wrong our system is that it allows and encourages one
-				person to keep so much of the profits while so many of the worlds problems could be solved
-				by a fraction of it.
+				It's almost impossible to visualize a billion dollars, let alone several trillion dollars,
+				the net wealth of around a 2,000 or so billionaires. Scroll to the right in the below
+				graphic to better understand just how imbalanced our system is that it allows and encourages
+				around 2,000 people to keep so much of the profits while so many of the worlds problems
+				could be solved by a fraction of it.
 				<br />
 				<br />
 				Just keep scrolling, trust us! Take about 5 minutes to keep scrolling.
@@ -96,7 +96,7 @@
 				topic, start here. This will guide you through slowly from feeling powerless at work to
 				understanding how to take the power back.
 			</p>
-			<a href="/starthere" class="my-5 w-full" role="button">Start here!</a>
+			<a href="/startHere" class="my-5 w-full" role="button">Start here!</a>
 		</div>
 		<div class="w-10/12 self-end border-orange-600 border-4 p-5 rounded-3xl">
 			<h2
@@ -152,7 +152,7 @@
 				<p class="text-center">
 					Browse courses to learn new topics or help guide your learning journey.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Questions & FAQ -->
@@ -182,7 +182,7 @@
 					Search through all of the myths and frequently asked questions about socialism,
 					capitalism, and all the other isms.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Digital Tools -->
@@ -213,7 +213,7 @@
 					marketing material for your campaign? Check out our library of digital tools to help with
 					organizing, campaigning, and activism.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Research & Resources -->
@@ -243,7 +243,7 @@
 					Looking for help forming a union? Want help fundraising for a campaign? Want to develop
 					marketing material for your campaign?
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Unions -->
@@ -273,7 +273,7 @@
 					Learn why unions are so important, what your rights are, and how to use unions to improve
 					your life.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Policies -->
@@ -302,7 +302,7 @@
 				<p class="text-center">
 					Learn what to fight for and how to determine a good political leader from a bad one.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Get Involved -->
@@ -332,7 +332,7 @@
 					Learn how you can run for a political position, volunteer, fund raise, organize, and
 					otherwise contribute to the movement.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Readings $ Theory -->
@@ -362,7 +362,7 @@
 					Dig deeper into theory and discovery historic events, impactful authors, and world-view
 					altering perspectives.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Readings & Theory -->
@@ -392,7 +392,7 @@
 					Find music, movie, website, video, podcast, game, and more suggestions related to
 					progressivism and the socialist movement.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 
 			<!-- Health & Lifestyle -->
@@ -421,7 +421,7 @@
 				<p class="text-center">
 					Discovery bits of information and tips on lifestyle management and healthy living.
 				</p>
-				<a href="#" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
+				<a href="/" class="w-full bg-neutral-900 border-neutral-500 mt-5" role="button">Explore</a>
 			</div>
 		</div>
 	</section>
@@ -430,11 +430,11 @@
 	<section>
 		<div class="flex justify-around mb-10">
 			<p class="text-xl">Want to contribute to the website? Get in touch here.</p>
-			<a href="#" role="button" class="bg-sky-600 border-sky-950">Get In Touch</a>
+			<a href="/" role="button" class="bg-sky-600 border-sky-950">Get In Touch</a>
 		</div>
 		<div class="flex justify-around">
 			<p class="text-xl">Want to donate to the website? Use the button to help out</p>
-			<a href="#" role="button" class="bg-lime-600 border-green-950">Donate</a>
+			<a href="/" role="button" class="bg-lime-600 border-green-950">Donate</a>
 		</div>
 	</section>
 </header>
@@ -452,7 +452,7 @@
 	<div class="mb-10">
 		<h6 class="text-2xl">Categories</h6>
 		<ul class="text-gray-500 indent-8">
-			<li class="list-none"><a href="/start-here">New? Start here</a></li>
+			<li class="list-none"><a href="/startHere">New? Start here</a></li>
 			<li class="list-none"><a href="/questions">Questions?</a></li>
 			<li class="list-none"><a href="/courses">Courses</a></li>
 			<li class="list-none"><a href="/myths-faq">Myths & FAQs</a></li>
