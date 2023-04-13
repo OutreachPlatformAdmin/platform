@@ -6,10 +6,15 @@
 		</h1>
 		<details class="p-5 rounded-lg bg-slate-800 my-5">
 			<summary>Bullet Points</summary>
-			<p class="bg-slate-700 p-5 rounded-md">
-				Lorem ipsum dolor, sit amet consectetur adipisicing elit. Distinctio laudantium assumenda ex
-				minima dolorem molestias voluptatum delectus veritatis ducimus accusantium!
-			</p>
+			<div class="bg-slate-700 p-5 rounded-md">
+				<ul class="grid grid-cols-2">
+					<li>
+						By taxing a percentage of the wealthiest 2,100 people, most of the worlds worst problems
+						could be financially resolved
+					</li>
+					<li />
+				</ul>
+			</div>
 		</details>
 		<div>
 			<p class="my-5 indent-10">

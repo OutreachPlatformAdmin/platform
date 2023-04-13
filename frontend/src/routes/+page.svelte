@@ -1,6 +1,18 @@
-<header>
+<script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { fade } from 'svelte/transition';
+
+	let cardStates = false;
+
+	function clicked() {
+		cardStates = !cardStates;
+		console.log(cardStates);
+	}
+</script>
+
+<header class="lg:w-8/12 flex flex-col m-auto" transition:fade>
 	<!-- Banner image -->
-	<figure class="relative">
+	<!-- <figure class="relative">
 		<img
 			class="object-cover w-full h-[400px] rounded-xl"
 			src="/images/banner-image.jpg"
@@ -17,13 +29,49 @@
 				class="text-cyan-500">Unsplash</a
 			>
 		</figcaption>
-	</figure>
+	</figure> -->
+
+	<!-- Call to action to introductory sections -->
+
+	<section class="">
+		<h1 class="w-full my-5 pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center">
+			People over profits
+		</h1>
+		<div class=" grid grid-cols-2">
+			<a href="/startHere" class="w-full bg-sky-700" role="button">New? Start here!</a>
+			<a href="/startHere" class="w-full bg-green-700" role="button">Got Questions?</a>
+		</div>
+	</section>
+
+	<section>
+		<div class="w-1/2 h-fit border-white border-2 rounded-lg">
+			<div class={cardStates === true ? 'hidden' : ''}>
+				<h3 class="text-center py-2">
+					How much does the average CEO make compared to the average worker?
+				</h3>
+			</div>
+
+			<div class={cardStates === true ? '' : 'hidden'} transition:fade>
+				<p class="text-center pt-5">399-to-1</p>
+				<p class="mx-10">
+					In 2021, the ratio of CEO-to-typical-worker compensation was 399-to-1 under the realized
+					measure of CEO pay; that is up from 366-to-1 in 2020 and a big increase from 20-to-1 in
+					1965 and 59-to-1 in 1989.
+				</p>
+				<cite class=""
+					><a class="" href="https://www.epi.org/publication/ceo-pay-in-2021/"
+						>Economic Polict Institute</a
+					></cite
+				>
+			</div>
+			<button role="button" class="my-5 mx-5 w-1/2 text-center" value="1" on:click={clicked}
+				>Answer</button
+			>
+		</div>
+	</section>
 
 	<!-- Welcome text and intro wealth inequality video -->
 	<section class="">
-		<h1 class="w-full mt-5 pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center">
-			Welcome
-		</h1>
 		<div>
 			<p class="my-5 indent-10">
 				Welcome to a platform for learning how the world works, what can be done about it, and how
@@ -80,35 +128,6 @@
 					>
 				</figcaption>
 			</figure>
-		</div>
-	</section>
-
-	<!-- Call to action to introductory sections -->
-	<section class="flex flex-col">
-		<div class="w-10/12 mb-10  border-yellow-600 border-4 p-5 rounded-3xl">
-			<h2
-				class="pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center text-yellow-300"
-			>
-				New? Start here!
-			</h2>
-			<p class="mt-5 indent-10">
-				If you're new to economics, socialism, capitalism, politics, or any other boring but import
-				topic, start here. This will guide you through slowly from feeling powerless at work to
-				understanding how to take the power back.
-			</p>
-			<a href="/startHere" class="my-5 w-full" role="button">Start here!</a>
-		</div>
-		<div class="w-10/12 self-end border-orange-600 border-4 p-5 rounded-3xl">
-			<h2
-				class="pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center text-orange-500"
-			>
-				Got questions?
-			</h2>
-			<p class="mt-5 indent-10">
-				Click the button to access the entire knowledge database and get answers to many common
-				questions
-			</p>
-			<a href="/questions" class="my-5 w-full" role="button">Search for answers</a>
 		</div>
 	</section>
 
