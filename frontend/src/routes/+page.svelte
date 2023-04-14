@@ -1,29 +1,54 @@
-<header>
-	<!-- Banner image -->
-	<figure class="relative">
-		<img
-			class="object-cover w-full h-[400px] rounded-xl"
-			src="/images/banner-image.jpg"
-			alt="banner of a hand and globe"
-		/>
-		<figcaption class="absolute right-0 bottom-0 z-10 opacity-75 mr-5">
-			Photo by <a
-				href="https://unsplash.com/@weirick?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-				class="text-cyan-600">Jake Weirick</a
-			>
-			on
-			<a
-				href="https://unsplash.com/photos/C47_TXZZwIM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-				class="text-cyan-500">Unsplash</a
-			>
-		</figcaption>
-	</figure>
+<script lang="ts">
+	import { flip } from 'svelte/animate';
+	import { fade } from 'svelte/transition';
+	import FlipCard from '../components/FlipCard.svelte';
+
+	let cardStates = false;
+
+	function clicked() {
+		cardStates = !cardStates;
+		console.log(cardStates);
+	}
+
+	let cards = [
+		{
+			id: 1,
+			question: 'this is question 1?',
+			answer: 'This is the answer for question 1'
+		},
+		{
+			id: 2,
+			question: 'this is question 2?',
+			answer: 'This is the answer for question 2'
+		},
+		{
+			id: 3,
+			question: 'this is question 3?',
+			answer: 'This is the answer for question 3'
+		}
+	];
+</script>
+
+<header class="lg:w-8/12 flex flex-col m-auto" transition:fade>
+	<!-- Call to action to introductory sections -->
+	<section class="">
+		<h1 class="w-full my-5 pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center">
+			People over profits
+		</h1>
+		<div class=" grid grid-cols-2">
+			<a href="/startHere" class="w-full bg-sky-700" role="button">New? Start here!</a>
+			<a href="/startHere" class="w-full bg-green-700" role="button">Got Questions?</a>
+		</div>
+	</section>
+
+	<section class="grid grid-cols-3">
+		{#each cards as { question, answer }}
+			<FlipCard {question} {answer} />
+		{/each}
+	</section>
 
 	<!-- Welcome text and intro wealth inequality video -->
 	<section class="">
-		<h1 class="w-full mt-5 pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center">
-			Welcome
-		</h1>
 		<div>
 			<p class="my-5 indent-10">
 				Welcome to a platform for learning how the world works, what can be done about it, and how
@@ -80,35 +105,6 @@
 					>
 				</figcaption>
 			</figure>
-		</div>
-	</section>
-
-	<!-- Call to action to introductory sections -->
-	<section class="flex flex-col">
-		<div class="w-10/12 mb-10  border-yellow-600 border-4 p-5 rounded-3xl">
-			<h2
-				class="pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center text-yellow-300"
-			>
-				New? Start here!
-			</h2>
-			<p class="mt-5 indent-10">
-				If you're new to economics, socialism, capitalism, politics, or any other boring but import
-				topic, start here. This will guide you through slowly from feeling powerless at work to
-				understanding how to take the power back.
-			</p>
-			<a href="/startHere" class="my-5 w-full" role="button">Start here!</a>
-		</div>
-		<div class="w-10/12 self-end border-orange-600 border-4 p-5 rounded-3xl">
-			<h2
-				class="pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center text-orange-500"
-			>
-				Got questions?
-			</h2>
-			<p class="mt-5 indent-10">
-				Click the button to access the entire knowledge database and get answers to many common
-				questions
-			</p>
-			<a href="/questions" class="my-5 w-full" role="button">Search for answers</a>
 		</div>
 	</section>
 
