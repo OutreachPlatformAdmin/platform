@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { flip } from 'svelte/animate';
 	import { fade } from 'svelte/transition';
+	import FlipCard from '../components/FlipCard.svelte';
 
 	let cardStates = false;
 
@@ -8,31 +9,28 @@
 		cardStates = !cardStates;
 		console.log(cardStates);
 	}
+
+	let cards = [
+		{
+			id: 1,
+			question: 'this is question 1?',
+			answer: 'This is the answer for question 1'
+		},
+		{
+			id: 2,
+			question: 'this is question 2?',
+			answer: 'This is the answer for question 2'
+		},
+		{
+			id: 3,
+			question: 'this is question 3?',
+			answer: 'This is the answer for question 3'
+		}
+	];
 </script>
 
 <header class="lg:w-8/12 flex flex-col m-auto" transition:fade>
-	<!-- Banner image -->
-	<!-- <figure class="relative">
-		<img
-			class="object-cover w-full h-[400px] rounded-xl"
-			src="/images/banner-image.jpg"
-			alt="banner of a hand and globe"
-		/>
-		<figcaption class="absolute right-0 bottom-0 z-10 opacity-75 mr-5">
-			Photo by <a
-				href="https://unsplash.com/@weirick?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-				class="text-cyan-600">Jake Weirick</a
-			>
-			on
-			<a
-				href="https://unsplash.com/photos/C47_TXZZwIM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-				class="text-cyan-500">Unsplash</a
-			>
-		</figcaption>
-	</figure> -->
-
 	<!-- Call to action to introductory sections -->
-
 	<section class="">
 		<h1 class="w-full my-5 pt-3 pb-5 text-5xl border-t-4 border-b-4 border-slate-500 text-center">
 			People over profits
@@ -43,31 +41,10 @@
 		</div>
 	</section>
 
-	<section>
-		<div class="w-1/2 h-fit border-white border-2 rounded-lg">
-			<div class={cardStates === true ? 'hidden' : ''}>
-				<h3 class="text-center py-2">
-					How much does the average CEO make compared to the average worker?
-				</h3>
-			</div>
-
-			<div class={cardStates === true ? '' : 'hidden'} transition:fade>
-				<p class="text-center pt-5">399-to-1</p>
-				<p class="mx-10">
-					In 2021, the ratio of CEO-to-typical-worker compensation was 399-to-1 under the realized
-					measure of CEO pay; that is up from 366-to-1 in 2020 and a big increase from 20-to-1 in
-					1965 and 59-to-1 in 1989.
-				</p>
-				<cite class=""
-					><a class="" href="https://www.epi.org/publication/ceo-pay-in-2021/"
-						>Economic Polict Institute</a
-					></cite
-				>
-			</div>
-			<button role="button" class="my-5 mx-5 w-1/2 text-center" value="1" on:click={clicked}
-				>Answer</button
-			>
-		</div>
+	<section class="grid grid-cols-3">
+		{#each cards as { question, answer }}
+			<FlipCard {question} {answer} />
+		{/each}
 	</section>
 
 	<!-- Welcome text and intro wealth inequality video -->
