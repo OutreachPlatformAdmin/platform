@@ -16,6 +16,10 @@ To start the Axum server such that it will refresh with each saved code change:
 cargo watch -x run
 ```
 
+The API server runs on port 3000: 
+```
+http://localhost:3000/
+```
 
 ### Environment Variables 
 
