@@ -1,5 +1,5 @@
 <script lang="ts">
-	import FlipCard from '../../components/FlipCard.svelte';
+	import FlipCard from '../../FlipCard.svelte';
 
 	let cardStates = false;
 
@@ -27,8 +27,10 @@
 	];
 </script>
 
-<section class="grid lg:grid-cols-3 grid-cols-2 gap-5">
-	{#each cards as { question, answer }}
-		<FlipCard {question} {answer} />
-	{/each}
-</section>
+<div class="">
+	<section class="grid lg:grid-cols-3 grid-cols-2 gap-5 p-2">
+		{#each cards as { question, answer }}
+			<FlipCard {question} {answer} />
+		{/each}
+	</section>
+</div>

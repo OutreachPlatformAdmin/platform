@@ -1,7 +1,7 @@
 <!-- Interactive wealth inequality -->
 <section>
 	<hgroup>
-		<h2 class="text-3xl mb-4">Would taxing the richest handful of billionaires solve anything?</h2>
+		<h2 class="text-3xl pb-10">Would taxing the richest handful of billionaires solve anything?</h2>
 		<h3 class="indent-10">
 			It's almost impossible to visualize a billion dollars, let alone several trillion dollars, the
 			net wealth of around a 2,000 or so billionaires. Scroll to the right in the below graphic to
@@ -13,7 +13,7 @@
 			Just keep scrolling, trust us! Take about 5 minutes to keep scrolling.
 		</h3>
 	</hgroup>
-	<div class="relative">
+	<div class="relative ">
 		<figure>
 			<iframe
 				src="https://mkorostoff.github.io/1-pixel-wealth/"
