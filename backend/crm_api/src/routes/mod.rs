@@ -8,7 +8,7 @@ mod topics;
 use axum::{extract::FromRef, routing::get, Router};
 use hello_world::hello_world;
 use sqlx::postgres::PgPool;
-use terms::get_all_terms_handler;
+use terms::{get_all_terms_for_topic_handler, get_all_terms_handler};
 use topics::get_all_topics_handler;
 
 #[derive(Clone, FromRef)]
@@ -22,5 +22,6 @@ pub fn create_routes(db_pool: PgPool) -> Router {
         .route("/", get(hello_world))
         .route("/topics", get(get_all_topics_handler))
         .route("/terms", get(get_all_terms_handler))
+        .route("/terms-from-topic", get(get_all_terms_for_topic_handler))
         .with_state(app_state)
 }
