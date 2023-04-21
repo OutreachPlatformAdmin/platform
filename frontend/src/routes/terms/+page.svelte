@@ -1,5 +1,11 @@
+<script lang="ts">
+	let terms = ['capitalism', 'socialism', 'union', 'Strike action'];
+</script>
+
 <ul>
-	<li>
-		<a href="/terms/term">Strike Action</a>
-	</li>
+	{#each terms as term}
+		<li>
+			<a href="/terms/{term}">{term}</a>
+		</li>
+	{/each}
 </ul>
