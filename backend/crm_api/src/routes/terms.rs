@@ -26,7 +26,7 @@ pub async fn get_all_terms(db_pool: &PgPool) -> Result<Vec<Term>> {
     Ok(terms)
 }
 
-pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: String) -> Result<Vec<Term>> {
+pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: &str) -> Result<Vec<Term>> {
     // first get topic id
     let record = query!("SELECT id from platform.topics where topic = $1", topic)
         .fetch_one(db_pool)
@@ -56,8 +56,7 @@ pub async fn get_all_terms_for_topic_handler(
     State(db_pool): State<PgPool>,
     params: axum::extract::Query<QueryParams>,
 ) -> Json<Vec<Term>> {
-    let topic: &String = &params.topic;
-    let terms = get_all_terms_for_a_topic(&db_pool, topic.to_string())
+    let terms = get_all_terms_for_a_topic(&db_pool, &params.topic)
         .await
         .unwrap();
     Json(terms)
