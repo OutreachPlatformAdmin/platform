@@ -8,6 +8,11 @@ pub struct Term {
     term: String,
 }
 
+#[derive(Deserialize)]
+pub struct QueryParams {
+    topic: String,
+}
+
 pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Json<Vec<Term>> {
     let terms = get_all_terms(&db_pool).await.unwrap();
     Json(terms)
@@ -41,10 +46,19 @@ pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: String) -> Resul
     Ok(terms)
 }
 
+/*
+Ex1:
+http://localhost:3000/terms-from-topic?topic=new%20topic
+Ex2:
+http://localhost:3000/terms-from-topic?topic=neoliberalism
+ */
 pub async fn get_all_terms_for_topic_handler(
     State(db_pool): State<PgPool>,
-    topic: String,
+    params: axum::extract::Query<QueryParams>,
 ) -> Json<Vec<Term>> {
-    let terms = get_all_terms_for_a_topic(&db_pool, topic).await.unwrap();
+    let topic: &String = &params.topic;
+    let terms = get_all_terms_for_a_topic(&db_pool, topic.to_string())
+        .await
+        .unwrap();
     Json(terms)
 }
