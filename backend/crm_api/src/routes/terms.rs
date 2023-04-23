@@ -40,7 +40,7 @@ pub async fn get_all_terms_for_topic_handler(
 ) -> Json<Vec<Term>> {
     let terms = get_all_terms_for_a_topic(&db_pool, &params.topic)
         .await
-        .expect("failed ot retrieve terms for a given topic");
+        .expect("failed to retrieve terms for a given topic");
     Json(terms)
 }
 
