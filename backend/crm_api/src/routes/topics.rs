@@ -18,6 +18,10 @@ pub struct CreateTopic {
     topic: String,
 }
 
+/*
+ /topics
+- returns all topics
+ */
 pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Json<Vec<Topic>> {
     let topics = get_all_topics(&db_pool).await.unwrap();
     Json(topics)
@@ -31,6 +35,13 @@ pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
     Ok(topics)
 }
 
+/*
+/new-topic
+Body:
+{
+   "topic": "<new_topic_name>"
+}
+*/
 pub async fn new_topic_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopic>,
