@@ -23,7 +23,7 @@ pub struct CreateTopic {
 - returns all topics
  */
 pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Json<Vec<Topic>> {
-    let topics = get_all_topics(&db_pool).await.unwrap();
+    let topics = get_all_topics(&db_pool).await.expect("failed to retrieve topics");
     Json(topics)
 }
 
