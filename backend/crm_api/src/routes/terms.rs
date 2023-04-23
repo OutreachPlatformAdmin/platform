@@ -14,7 +14,9 @@ pub struct QueryParams {
 }
 
 pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Json<Vec<Term>> {
-    let terms = get_all_terms(&db_pool).await.unwrap();
+    let terms = get_all_terms(&db_pool)
+        .await
+        .expect("failed to retrieve terms");
     Json(terms)
 }
 
@@ -38,7 +40,7 @@ pub async fn get_all_terms_for_topic_handler(
 ) -> Json<Vec<Term>> {
     let terms = get_all_terms_for_a_topic(&db_pool, &params.topic)
         .await
-        .unwrap();
+        .expect("failed to retrieve terms for a given topic");
     Json(terms)
 }
 
