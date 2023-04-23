@@ -1,6 +1,11 @@
-use axum::{extract::State, Json};
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    Json,
+};
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, PgPool, Result};
+use sqlx::{query, FromRow, PgPool, Result};
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Topic {
@@ -8,6 +13,15 @@ pub struct Topic {
     topic: String,
 }
 
+#[derive(Deserialize)]
+pub struct CreateTopic {
+    topic: String,
+}
+
+/*
+ /topics
+- returns all topics
+ */
 pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Json<Vec<Topic>> {
     let topics = get_all_topics(&db_pool).await.unwrap();
     Json(topics)
@@ -19,4 +33,26 @@ pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
         .await?;
 
     Ok(topics)
+}
+
+/*
+/new-topic
+Body:
+{
+   "topic": "<new_topic_name>"
+}
+*/
+pub async fn new_topic_handler(
+    State(db_pool): State<PgPool>,
+    Json(payload): Json<CreateTopic>,
+) -> Response {
+    let topic = &payload.topic;
+    let insert_result = query!("INSERT INTO platform.topics (topic) VALUES ($1)", topic)
+        .execute(&db_pool)
+        .await;
+    let insert = match insert_result {
+        Ok(_insert_result) => "new topic created".into_response(),
+        Err(_err) => (StatusCode::INTERNAL_SERVER_ERROR, "Insertion to DB failed").into_response(),
+    };
+    insert
 }
