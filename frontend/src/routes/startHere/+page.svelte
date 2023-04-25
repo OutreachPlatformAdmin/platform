@@ -180,6 +180,7 @@
 		some suggested books and media material. But if you're ready to start making a real change, you
 		can do so in the following steps.
 	</p>
+	<!-- svelte-ignore a11y-no-redundant-roles -->
 	<ol role="list">
 		<li class="my-5 rounded-lg bg-slate-800 p-5">
 			<h3 class="text-3xl my-5">1. Understand these topics</h3>

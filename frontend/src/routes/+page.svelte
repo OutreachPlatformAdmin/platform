@@ -1,6 +1,17 @@
 <script lang="ts">
 	import Tabs from '../components/Tabs.svelte';
-	import Categories from '../homepageComponents/Categories/+page.svelte';
+	import Categories from '../components/homepageComponents/Categories/+page.svelte';
+	import StartHere from '../routes/startHere/+page.svelte';
+	import InteractiveFAQ from '../components/homepageComponents/InteractiveFAQ/+page.svelte';
+	import BriefIntro from '../components/homepageComponents/BriefIntro/+page.svelte';
+	import InteractiveWealth from '../components/homepageComponents/InteractiveWealth/+page.svelte';
+
+	const webpages = [
+		{ name: 'Brief Intro', component: BriefIntro },
+		{ name: 'Interactive FAQ', component: InteractiveFAQ },
+		{ name: 'Interactive Wealth', component: InteractiveWealth },
+		{ name: 'About', component: StartHere }
+	];
 </script>
 
 <header class="lg:w-8/12 flex flex-col m-auto">
@@ -17,7 +28,7 @@
 		<!-- </div> -->
 	</section>
 
-	<Tabs />
+	<Tabs {webpages} />
 
 	<Categories />
 

@@ -1,32 +1,22 @@
 <script lang="ts">
-	import StartHere from '../routes/startHere/+page.svelte';
-	import InteractiveFAQ from '../homepageComponents/InteractiveFAQ/+page.svelte';
-	import BriefIntro from '../homepageComponents/BriefIntro/+page.svelte';
-	import InteractiveWealth from '../homepageComponents/InteractiveWealth/+page.svelte';
-	const webpages = [
-		{ name: 'Brief Intro', component: BriefIntro },
-		{ name: 'Interactive FAQ', component: InteractiveFAQ },
-		{ name: 'Interactive Wealth', component: InteractiveWealth },
-		{ name: 'About', component: StartHere }
-	];
-
-	// Loads an object in webpages array
+	export let webpages: any[];
 	let selectedPage = webpages[0];
-	$: console.dir(selectedPage);
 
 	// Have to use obj as arg. so value can be a class
 	const loadPage = (obj: any) => (selectedPage = obj);
 </script>
 
 <div>
-	{#each webpages as webpageObj}
-		<button class="tablink" title={webpageObj.name} on:click={() => loadPage(webpageObj)}
-			>{webpageObj.name}</button
-		>
-	{/each}
+	<div class="pb-20">
+		{#each webpages as webpageObj}
+			<button class="tablink" title={webpageObj.name} on:click={() => loadPage(webpageObj)}
+				>{webpageObj.name}</button
+			>
+		{/each}
+	</div>
 
 	<!-- Loaded component/webpage -->
-	<svelte:component this={selectedPage.component} />
+	<svelte:component this={selectedPage.component} props={selectedPage.props} />
 </div>
 
 <style>
