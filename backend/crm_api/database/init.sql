@@ -6,9 +6,36 @@ connecting to the new db in psql:
 \c platform;
 CREATE SCHEMA platform;
 
+/*
+Table sources {
+  id int [pk, increment]
+  url varchar
+  mediaType varchar
+  imageurl varchar
+  imageType varchar
+}
+*/
+
+CREATE TYPE media_type AS ENUM ('wiki_article', 'book', 'dictionary', 'website', 'print');
+CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
+
+CREATE TABLE platform.sources (
+	id serial NOT NULL,
+	name text,
+	url text,
+	media_type media_type, -- ENUM defined above
+	image_url text, 
+	image_type image_type, -- ENUM defined above
+	PRIMARY KEY (id)
+);
+
 CREATE TABLE platform.topics (
 	id serial NOT NULL,
-	topic text NOT NULL, 
+	topic text NOT NULL,
+	definition text NOT NULL,
+	ai_definition text,
+	source_id int,
+	FOREIGN KEY (source_id) REFERENCES platform.sources(id), 
 	PRIMARY KEY (id),
 	CONSTRAINT unique_topic UNIQUE(topic)
 );
@@ -16,9 +43,14 @@ CREATE TABLE platform.topics (
 CREATE TABLE platform.terms (
 	id serial NOT NULL,
 	term text NOT NULL,
+	definition text NOT NULL,
+	ai_definition text,
+	source_id int,
+	FOREIGN KEY (source_id) REFERENCES platform.sources(id),
 	PRIMARY KEY (id),
 	CONSTRAINT unique_term UNIQUE(term)
 );
+
 
 /*
 bridge table for terms and topics
@@ -96,15 +128,19 @@ CREATE TABLE platform.articles_to_questions (
 	UNIQUE(article_id, question_id)
 );
 
+----------------- Insertion of Sample Data -----------------
+
 -- we don't need to specify the `id` column bc it is serial 
 -- so it will auto-increment
-INSERT INTO platform.topics (topic) VALUES ('new topic');
-INSERT INTO platform.topics (topic) VALUES ('neoliberalism');
+INSERT INTO platform.sources (url, media_type) VALUES ('https://www.merriam-webster.com/dictionary/austerity', 'dictionary');
+INSERT INTO platform.sources (url, media_type) VALUES ('https://en.wikipedia.org/wiki/Neoliberalism', 'wiki_article');
+INSERT INTO platform.sources (url, media_type) VALUES ('https://en.wikipedia.org/wiki/Capitalism', 'wiki_article');
 
+INSERT INTO platform.topics (topic, definition, source_id) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.', 3);
 
-INSERT INTO platform.terms (term) VALUES ('new term');
-INSERT INTO platform.terms (term) VALUES ('new term 2');
-INSERT INTO platform.terms (term) VALUES ('new term 3');
+INSERT INTO platform.terms (term, definition, source_id) VALUES ('austerity', 'difficult economic conditions created by government measures to reduce a budget deficit, especially by reducing public expenditure', 1);
+INSERT INTO platform.terms (term, definition, source_id) VALUES ('neoliberalism', 'a term used to signify the late-20th century political reappearance of 19th-century ideas associated with free-market capitalism after it fell into decline following the Second World War', 2);
+
 
 /*
 For now we manually need to update the bridge table.
@@ -113,15 +149,15 @@ these tables in the code makes the required updates.
 */
 INSERT INTO platform.terms_to_topics (term_id, topic_id) VALUES (1, 1),
 (2, 1);
-INSERT INTO platform.terms_to_topics (term_id, topic_id) VALUES (3, 2);
 
 
-INSERT INTO platform.questions (question, topic_id) VALUES ('question about new topic', 1);
+INSERT INTO platform.questions (question, topic_id) VALUES ('What is capitalism?', 1);
 
-INSERT INTO platform.related_topics (parent_id, child_id) VALUES (1, 2);
+-- INSERT INTO platform.related_topics (parent_id, child_id) VALUES (1, 2);
 
 INSERT INTO platform.articles (title, author, publish_date) VALUES ('title1', 'author1', '2023-03-27');
 
-INSERT INTO platform.articles_to_topics VALUES (1, 2);
-INSERT INTO platform.articles_to_terms VALUES (1,1), (1,3);
+INSERT INTO platform.articles_to_topics VALUES (1, 1);
+INSERT INTO platform.articles_to_terms VALUES (1,1), (1,2);
 INSERT INTO platform.articles_to_questions VALUES (1,1);
+
