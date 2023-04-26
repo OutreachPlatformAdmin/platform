@@ -6,16 +6,6 @@ connecting to the new db in psql:
 \c platform;
 CREATE SCHEMA platform;
 
-/*
-Table sources {
-  id int [pk, increment]
-  url varchar
-  mediaType varchar
-  imageurl varchar
-  imageType varchar
-}
-*/
-
 CREATE TYPE media_type AS ENUM ('wiki_article', 'book', 'dictionary', 'website', 'print');
 CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
 
