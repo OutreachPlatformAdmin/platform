@@ -1,4 +1,9 @@
-use axum::{extract::State, Json};
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    Json,
+};
 use serde::{Deserialize, Serialize};
 use sqlx::{query, FromRow, PgPool, Result};
 
@@ -13,18 +18,18 @@ pub struct QueryParams {
     topic: String,
 }
 
-pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Json<Vec<Term>> {
-    let terms = get_all_terms(&db_pool)
-        .await
-        .expect("failed to retrieve terms");
-    Json(terms)
+pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Response {
+    let terms = get_all_terms(&db_pool).await;
+    match terms {
+        Ok(terms) => (StatusCode::OK, Json(terms)).into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
 }
 
 pub async fn get_all_terms(db_pool: &PgPool) -> Result<Vec<Term>> {
     let terms = sqlx::query_as::<_, Term>("SELECT id, term FROM platform.terms")
         .fetch_all(db_pool)
         .await?;
-
     Ok(terms)
 }
 
@@ -37,11 +42,13 @@ http://localhost:3000/terms-from-topic?topic=neoliberalism
 pub async fn get_all_terms_for_topic_handler(
     State(db_pool): State<PgPool>,
     params: axum::extract::Query<QueryParams>,
-) -> Json<Vec<Term>> {
-    let terms = get_all_terms_for_a_topic(&db_pool, &params.topic)
-        .await
-        .expect("failed to retrieve terms for a given topic");
-    Json(terms)
+) -> Response {
+    let terms = get_all_terms_for_a_topic(&db_pool, &params.topic).await;
+
+    match terms {
+        Ok(terms) => (StatusCode::OK, Json(terms)).into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
 }
 
 pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: &str) -> Result<Vec<Term>> {

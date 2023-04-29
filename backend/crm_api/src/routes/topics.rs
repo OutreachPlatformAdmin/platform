@@ -22,16 +22,20 @@ pub struct CreateTopic {
  /topics
 - returns all topics
  */
-pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Json<Vec<Topic>> {
-    let topics = get_all_topics(&db_pool).await.expect("failed to retrieve topics");
-    Json(topics)
+pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Response {
+    let topics = get_all_topics(&db_pool).await;
+    match topics {
+        Ok(topics) => (StatusCode::OK, Json(topics)).into_response(),
+        // for errors Axum expects the axum::response::Response type
+        // example output: error returned from database: relation "platform.tipics" does not exist
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response()
+    }
 }
 
 pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
     let topics = sqlx::query_as::<_, Topic>("SELECT id, topic FROM platform.topics")
         .fetch_all(db_pool)
         .await?;
-
     Ok(topics)
 }
 
@@ -46,13 +50,13 @@ pub async fn new_topic_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopic>,
 ) -> Response {
+    // TODO: add definition to topic creation!
     let topic = &payload.topic;
     let insert_result = query!("INSERT INTO platform.topics (topic) VALUES ($1)", topic)
         .execute(&db_pool)
         .await;
-    let insert = match insert_result {
+    match insert_result {
         Ok(_insert_result) => "new topic created".into_response(),
-        Err(_err) => (StatusCode::INTERNAL_SERVER_ERROR, "Insertion to DB failed").into_response(),
-    };
-    insert
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
 }
