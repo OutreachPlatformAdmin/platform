@@ -9,6 +9,44 @@ CREATE SCHEMA platform;
 CREATE TYPE media_type AS ENUM ('wiki_article', 'book', 'dictionary', 'website', 'print');
 CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
 
+/*
+Table terms {
+  id int [pk, increment]
+  
+  // store if 100% of content is human created
+  isVerified boolean
+
+  // data fields
+  term varchar
+
+  briefDescription varchar
+
+  fullDescription varchar
+  
+  bulletPoints [varchar]
+
+  examples [varchar]
+
+  parallels [varchar]
+
+  resources [int] [ref: > sources.id]
+
+  // AI-generated data fields 
+  AIbriefDescription varchar
+
+  AIfullDescription varchar
+  
+  AIbulletPoints [varchar]
+
+  AIexamples [varchar]
+
+  AIparallels [varchar]
+
+  AIresources [int] [ref: > sources.id]
+
+}
+*/
+
 CREATE TABLE platform.sources (
 	id serial NOT NULL,
 	name text,
@@ -36,6 +74,7 @@ CREATE TABLE platform.terms (
 	definition text NOT NULL,
 	ai_definition text,
 	source_id int,
+	is_verified int,
 	FOREIGN KEY (source_id) REFERENCES platform.sources(id),
 	PRIMARY KEY (id),
 	CONSTRAINT unique_term UNIQUE(term)

@@ -37,11 +37,15 @@ the `platform` db and schema. It also contains some insert statements to insert 
 
 There's also a `.env` file in `backend/crm_api` that can be used to set environment variables for the docker container that is not checked in to git. It's recommended to set the `POSTGRES_PASSWORD` environment variable there.
 
-Start up the docker container which will create a docker container running a postgres instance
+### Starting up the database container that interfaces with the Axum server
+
 ```
 cd backend/crm_api
 docker compose up
 ```
+
+### Getting into the database container directly via psql
+
 get container name
 ```
 docker ps
