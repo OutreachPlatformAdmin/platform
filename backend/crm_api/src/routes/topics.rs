@@ -33,7 +33,7 @@ pub async fn get_all_topics_handler(State(db_pool): State<PgPool>) -> Response {
 }
 
 pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
-    let topics = sqlx::query_as::<_, Topic>("SELECT id, topic FROM platform.tipics")
+    let topics = sqlx::query_as::<_, Topic>("SELECT id, topic FROM platform.topics")
         .fetch_all(db_pool)
         .await?;
     Ok(topics)
