@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let props: any;
-	const html = props.full.replace(/\n/g, '<br><br>');
+	const html = props.full.replace(/\n/g, '<br>');
 </script>
 
 <div>
