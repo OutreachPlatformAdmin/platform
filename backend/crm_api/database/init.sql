@@ -6,32 +6,11 @@ connecting to the new db in psql:
 \c platform;
 CREATE SCHEMA platform;
 
--- 'dictionary'
-
-CREATE TYPE media_type AS ENUM (
-'audio', 'video', 'web', 'book', 'scientific_article'
-);
-
-
+CREATE TYPE media_type AS ENUM ('audio', 'video', 'web', 'book', 'scientific article');
 CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
 
-/*
-Table terms {
-  id int [pk, increment]
-
-
-  resources [int] [ref: > sources.id]
-
-  // AI-generated data fields 
-
-
-  AIresources [int] [ref: > sources.id]
-
-}
-*/
-
 CREATE TABLE platform.sources (
-	id int NOT NULL, -- look into if autoincrement 
+	id serial NOT NULL,
 	name text,
 	url text,
 	author text,
@@ -43,19 +22,10 @@ CREATE TABLE platform.sources (
 	PRIMARY KEY (id)
 );
 
-/*
-you need to make topics_to_sources 
-and 
-terms_to_sources 
-tables
-
-because a single topic could have various sources...
-*/
-
 CREATE TABLE platform.topics (
 	id serial NOT NULL,
 	topic text NOT NULL,
-	is_verified bool NOT NULL DEFAULT FALSE, -- how to default to false?
+	is_verified bool NOT NULL DEFAULT FALSE, 
 	breif_description text,
 	full_description text,
 	bullet_points text[],
@@ -67,8 +37,6 @@ CREATE TABLE platform.topics (
 	ai_bullet_points text[],
 	ai_parallels text[],
 	ai_examples text[],
-	source_id int,
-	FOREIGN KEY (source_id) REFERENCES platform.sources(id), 
 	PRIMARY KEY (id),
 	CONSTRAINT unique_topic UNIQUE(topic)
 );
@@ -76,28 +44,20 @@ CREATE TABLE platform.topics (
 CREATE TABLE platform.terms (
 	id serial NOT NULL,
 	term text NOT NULL,
-	definition text NOT NULL,
-	ai_definition text,
-	source_id int,
-	is_verified int,
-	FOREIGN KEY (source_id) REFERENCES platform.sources(id),
+	is_verified bool NOT NULL DEFAULT FALSE, 
+	breif_description text,
+	full_description text,
+	bullet_points text[],
+	examples text[],
+	parallels text[],
+	description_source_id int,
+	ai_brief_description text,
+	ai_full_description text,
+	ai_bullet_points text[],
+	ai_parallels text[],
+	ai_examples text[],
 	PRIMARY KEY (id),
 	CONSTRAINT unique_term UNIQUE(term)
-);
-
-
-/*
-bridge table for terms and topics
-query patterns: 
-- get all of the terms for a given topic
-- get all of the topics for a given term
-*/
-CREATE TABLE platform.terms_to_topics (
-	term_id int NOT NULL,
-	topic_id int NOT NULL,
-	FOREIGN KEY (term_id) REFERENCES platform.terms(id),
-	FOREIGN KEY (topic_id) REFERENCES platform.topics(id),
-	UNIQUE(term_id, topic_id)
 );
 
 /*
@@ -116,25 +76,44 @@ CREATE TABLE platform.questions (
 	CONSTRAINT unique_question UNIQUE(question)
 );
 
-/*
-this can be used when building the mind-map
-*/
-CREATE TABLE platform.related_topics (
-	id serial NOT NULL,
-	parent_id int NOT NULL,
-	child_id int NOT NULL,
-	PRIMARY KEY (id),
-	FOREIGN KEY (parent_id) REFERENCES platform.topics(id),
-	FOREIGN KEY (child_id) REFERENCES platform.topics(id),
-	UNIQUE(parent_id, child_id)
-);
-
 CREATE TABLE platform.articles (
 	id serial NOT NULL,
 	title text,
 	author text,
 	publish_date DATE,
 	PRIMARY KEY (id)
+);
+
+/*
+Bridge Table Definitions
+
+Sample query patterns: 
+- get all of the terms for a given topic
+- get all of the topics for a given term
+*/
+
+CREATE TABLE platform.topics_to_sources (
+	topic_id int NOT NULL,
+	source_id int NOT NULL,
+	FOREIGN KEY (topic_id) REFERENCES platform.topics(id),
+	FOREIGN KEY (source_id) REFERENCES platform.sources(id),
+	UNIQUE(topic_id, source_id)
+);
+
+CREATE TABLE platform.terms_to_sources (
+	term_id int NOT NULL,
+	source_id int NOT NULL,
+	FOREIGN KEY (term_id) REFERENCES platform.terms(id),
+	FOREIGN KEY (source_id) REFERENCES platform.sources(id),
+	UNIQUE(term_id, source_id)
+);
+
+CREATE TABLE platform.terms_to_topics (
+	term_id int NOT NULL,
+	topic_id int NOT NULL,
+	FOREIGN KEY (term_id) REFERENCES platform.terms(id),
+	FOREIGN KEY (topic_id) REFERENCES platform.topics(id),
+	UNIQUE(term_id, topic_id)
 );
 
 CREATE TABLE platform.articles_to_topics (
@@ -153,7 +132,6 @@ CREATE TABLE platform.articles_to_terms (
 	UNIQUE(article_id, term_id)
 );
 
-
 CREATE TABLE platform.articles_to_questions (
 	article_id int NOT NULL,
 	question_id int NOT NULL,
@@ -162,25 +140,40 @@ CREATE TABLE platform.articles_to_questions (
 	UNIQUE(article_id, question_id)
 );
 
+/*
+Mind Map Tables
+*/
+CREATE TABLE platform.related_topics (
+	id serial NOT NULL,
+	parent_id int NOT NULL,
+	child_id int NOT NULL,
+	PRIMARY KEY (id),
+	FOREIGN KEY (parent_id) REFERENCES platform.topics(id),
+	FOREIGN KEY (child_id) REFERENCES platform.topics(id),
+	UNIQUE(parent_id, child_id)
+);
+
+
 ----------------- Insertion of Sample Data -----------------
 
 -- we don't need to specify the `id` column bc it is serial 
 -- so it will auto-increment
-INSERT INTO platform.sources (url, media_type) VALUES ('https://www.merriam-webster.com/dictionary/austerity', 'dictionary');
-INSERT INTO platform.sources (url, media_type) VALUES ('https://en.wikipedia.org/wiki/Neoliberalism', 'wiki_article');
-INSERT INTO platform.sources (url, media_type) VALUES ('https://en.wikipedia.org/wiki/Capitalism', 'wiki_article');
+INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://www.merriam-webster.com/dictionary/austerity', 'web', 'false');
+INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Neoliberalism', 'web', 'false');
+INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Capitalism', 'web', 'false');
 
-INSERT INTO platform.topics (topic, definition, source_id) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.', 3);
+INSERT INTO platform.topics (topic, breif_description) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.');
 
-INSERT INTO platform.terms (term, definition, source_id) VALUES ('austerity', 'difficult economic conditions created by government measures to reduce a budget deficit, especially by reducing public expenditure', 1);
-INSERT INTO platform.terms (term, definition, source_id) VALUES ('neoliberalism', 'a term used to signify the late-20th century political reappearance of 19th-century ideas associated with free-market capitalism after it fell into decline following the Second World War', 2);
-
+INSERT INTO platform.terms (term, breif_description) VALUES ('austerity', 'difficult economic conditions created by government measures to reduce a budget deficit, especially by reducing public expenditure');
+INSERT INTO platform.terms (term, breif_description) VALUES ('neoliberalism', 'a term used to signify the late-20th century political reappearance of 19th-century ideas associated with free-market capitalism after it fell into decline following the Second World War');
 
 /*
 For now we manually need to update the bridge table.
-We can later set up a trigger to do this, or ensure the function that updates
-these tables in the code makes the required updates.
+When we create an endpoint to create new topics/terms/sources, logic should be included to additionally update these 
+bridge tables.
 */
+INSERT INTO platform.terms_to_sources (term_id, source_id) VALUES (1, 1), (2, 2);
+INSERT INTO platform.topics_to_sources (topic_id, source_id) VALUES (1, 3);
 INSERT INTO platform.terms_to_topics (term_id, topic_id) VALUES (1, 1),
 (2, 1);
 

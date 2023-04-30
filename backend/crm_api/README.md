@@ -23,10 +23,13 @@ http://localhost:3000/
 
 ### Environment Variables 
 
-all environment variables are stored in `crm_api/.env`
-
+environment variables for the docker database container are stored in `crm_api/database/.env`
 ```
 POSTGRES_PASSWORD=<password>
+```
+
+environment variables needed by the application are stored in `crm_api/.env`
+```
 DB_URI="postgresql://<username>:<password>@localhost:<port>/<database_name>"
 ```
 
@@ -35,12 +38,12 @@ DB_URI="postgresql://<username>:<password>@localhost:<port>/<database_name>"
 within the `database/` directory there is an `init.sql` file which contains the SQL to create  
 the `platform` db and schema. It also contains some insert statements to insert sample data.
 
-There's also a `.env` file in `backend/crm_api` that can be used to set environment variables for the docker container that is not checked in to git. It's recommended to set the `POSTGRES_PASSWORD` environment variable there.
+Make sure you set the required environment variables as explained in the previous section before running these commands.
 
 ### Starting up the database container that interfaces with the Axum server
 
 ```
-cd backend/crm_api
+cd backend/crm_api/database
 docker compose up
 ```
 
