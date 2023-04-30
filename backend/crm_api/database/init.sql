@@ -34,10 +34,12 @@ CREATE TABLE platform.sources (
 	id int NOT NULL, -- look into if autoincrement 
 	name text,
 	url text,
-	-- author / author url (see if there is already an author table defined)
+	author text,
+	author_url text,
 	media_type media_type, -- ENUM defined above
 	image_url text, 
 	image_type image_type, -- ENUM defined above
+	ai_generated bool,
 	PRIMARY KEY (id)
 );
 
@@ -65,7 +67,6 @@ CREATE TABLE platform.topics (
 	ai_bullet_points text[],
 	ai_parallels text[],
 	ai_examples text[],
-
 	source_id int,
 	FOREIGN KEY (source_id) REFERENCES platform.sources(id), 
 	PRIMARY KEY (id),
