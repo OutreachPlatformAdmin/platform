@@ -6,41 +6,24 @@ connecting to the new db in psql:
 \c platform;
 CREATE SCHEMA platform;
 
-CREATE TYPE media_type AS ENUM ('wiki_article', 'book', 'dictionary', 'website', 'print');
+-- 'dictionary'
+
+CREATE TYPE media_type AS ENUM (
+'audio', 'video', 'web', 'book', 'scientific_article'
+);
+
+
 CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
 
 /*
 Table terms {
   id int [pk, increment]
-  
-  // store if 100% of content is human created
-  isVerified boolean
 
-  // data fields
-  term varchar
-
-  briefDescription varchar
-
-  fullDescription varchar
-  
-  bulletPoints [varchar]
-
-  examples [varchar]
-
-  parallels [varchar]
 
   resources [int] [ref: > sources.id]
 
   // AI-generated data fields 
-  AIbriefDescription varchar
 
-  AIfullDescription varchar
-  
-  AIbulletPoints [varchar]
-
-  AIexamples [varchar]
-
-  AIparallels [varchar]
 
   AIresources [int] [ref: > sources.id]
 
@@ -48,20 +31,41 @@ Table terms {
 */
 
 CREATE TABLE platform.sources (
-	id serial NOT NULL,
+	id int NOT NULL, -- look into if autoincrement 
 	name text,
 	url text,
+	-- author / author url (see if there is already an author table defined)
 	media_type media_type, -- ENUM defined above
 	image_url text, 
 	image_type image_type, -- ENUM defined above
 	PRIMARY KEY (id)
 );
 
+/*
+you need to make topics_to_sources 
+and 
+terms_to_sources 
+tables
+
+because a single topic could have various sources...
+*/
+
 CREATE TABLE platform.topics (
 	id serial NOT NULL,
 	topic text NOT NULL,
-	definition text NOT NULL,
-	ai_definition text,
+	is_verified bool NOT NULL DEFAULT FALSE, -- how to default to false?
+	breif_description text,
+	full_description text,
+	bullet_points text[],
+	examples text[],
+	parallels text[],
+	description_source_id int,
+	ai_brief_description text,
+	ai_full_description text,
+	ai_bullet_points text[],
+	ai_parallels text[],
+	ai_examples text[],
+
 	source_id int,
 	FOREIGN KEY (source_id) REFERENCES platform.sources(id), 
 	PRIMARY KEY (id),
