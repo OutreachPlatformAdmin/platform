@@ -30,7 +30,7 @@ POSTGRES_PASSWORD=<password>
 
 environment variables needed by the application are stored in `crm_api/.env`
 ```
-DB_URI="postgresql://<username>:<password>@localhost:<port>/<database_name>"
+DATABASE_URL="postgresql://<username>:<password>@localhost:<port>/<database_name>"
 ```
 
 # Docker / Postgres Setup

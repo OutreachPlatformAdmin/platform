@@ -26,12 +26,11 @@ CREATE TABLE platform.topics (
 	id serial NOT NULL,
 	topic text NOT NULL,
 	is_verified bool NOT NULL DEFAULT FALSE, 
-	breif_description text,
+	brief_description text,
 	full_description text,
 	bullet_points text[],
 	examples text[],
 	parallels text[],
-	description_source_id int,
 	ai_brief_description text,
 	ai_full_description text,
 	ai_bullet_points text[],
@@ -45,12 +44,11 @@ CREATE TABLE platform.terms (
 	id serial NOT NULL,
 	term text NOT NULL,
 	is_verified bool NOT NULL DEFAULT FALSE, 
-	breif_description text,
+	brief_description text,
 	full_description text,
 	bullet_points text[],
 	examples text[],
 	parallels text[],
-	description_source_id int,
 	ai_brief_description text,
 	ai_full_description text,
 	ai_bullet_points text[],
@@ -162,10 +160,10 @@ INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://ww
 INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Neoliberalism', 'web', 'false');
 INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Capitalism', 'web', 'false');
 
-INSERT INTO platform.topics (topic, breif_description) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.');
+INSERT INTO platform.topics (topic, brief_description) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.');
 
-INSERT INTO platform.terms (term, breif_description) VALUES ('austerity', 'difficult economic conditions created by government measures to reduce a budget deficit, especially by reducing public expenditure');
-INSERT INTO platform.terms (term, breif_description) VALUES ('neoliberalism', 'a term used to signify the late-20th century political reappearance of 19th-century ideas associated with free-market capitalism after it fell into decline following the Second World War');
+INSERT INTO platform.terms (term, brief_description) VALUES ('austerity', 'difficult economic conditions created by government measures to reduce a budget deficit, especially by reducing public expenditure');
+INSERT INTO platform.terms (term, brief_description) VALUES ('neoliberalism', 'a term used to signify the late-20th century political reappearance of 19th-century ideas associated with free-market capitalism after it fell into decline following the Second World War');
 
 /*
 For now we manually need to update the bridge table.
