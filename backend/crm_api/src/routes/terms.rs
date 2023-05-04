@@ -11,6 +11,17 @@ use sqlx::{query, FromRow, PgPool, Result};
 pub struct Term {
     id: i32,
     term: String,
+    is_verified: bool,
+    brief_description: Option<String>,
+    full_description: Option<String>,
+    bullet_points: Option<Vec<String>>,
+    examples: Option<Vec<String>>,
+    parallels: Option<Vec<String>>,
+    ai_brief_description: Option<String>,
+    ai_full_description: Option<String>,
+    ai_bullet_points: Option<Vec<String>>,
+    ai_parallels: Option<Vec<String>>,
+    ai_examples: Option<Vec<String>>,
 }
 
 #[derive(Deserialize)]
@@ -27,7 +38,10 @@ pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Response {
 }
 
 pub async fn get_all_terms(db_pool: &PgPool) -> Result<Vec<Term>> {
-    let terms = sqlx::query_as::<_, Term>("SELECT id, term FROM platform.terms")
+    let terms = sqlx::query_as::<_, Term>("SELECT id, term, is_verified, brief_description,
+    full_description, bullet_points, examples, parallels, ai_brief_description, ai_full_description,
+    ai_bullet_points, ai_parallels, ai_examples
+    FROM platform.terms")
         .fetch_all(db_pool)
         .await?;
     Ok(terms)
@@ -59,7 +73,9 @@ pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: &str) -> Result<
 
     let terms: Vec<Term> = sqlx::query_as!(
         Term,
-        "SELECT id, term FROM platform.terms as terms 
+        "SELECT id, term, is_verified, brief_description,
+        full_description, bullet_points, examples, parallels, ai_brief_description, ai_full_description,
+        ai_bullet_points, ai_parallels, ai_examples FROM platform.terms as terms 
         INNER JOIN platform.terms_to_topics as terms_to_topics on 
         terms.id = terms_to_topics.term_id 
         where terms_to_topics.topic_id = $1",

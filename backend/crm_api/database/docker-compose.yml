@@ -1,9 +1,10 @@
 version: "3.9"
 services:
   database:
+    container_name: db
     image: postgres:latest 
     volumes: 
-      - "./database/init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
     env_file:
     # you can set the POSTGRES_PASSWORD env var in the .env
       - .env
