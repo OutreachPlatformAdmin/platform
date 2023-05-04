@@ -24,9 +24,20 @@ pub struct Topic {
 	ai_examples: Option<Vec<String>>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, FromRow)]
 pub struct CreateTopic {
     topic: String,
+	is_verified: Option<bool>, 
+	brief_description: Option<String>,
+	full_description: Option<String>,
+	// bullet_points: Option<Vec<String>>,
+	// examples: Option<Vec<String>>,
+	// parallels: Option<Vec<String>>,
+	ai_brief_description: Option<String>,
+	ai_full_description: Option<String>,
+	// ai_bullet_points: Option<Vec<String>>,
+	// ai_parallels: Option<Vec<String>>,
+	// ai_examples: Option<Vec<String>>,
 }
 
 /*
@@ -64,11 +75,17 @@ pub async fn new_topic_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopic>,
 ) -> Response {
-    // TODO: add definition to topic creation!
-    let topic = &payload.topic;
-    let insert_result = query!("INSERT INTO platform.topics (topic) VALUES ($1)", topic)
-        .execute(&db_pool)
-        .await;
+    // TODO: look into how to insert Vecs into the INSERT SQL statement...
+    let insert_query = query!("INSERT INTO platform.topics (topic, is_verified, brief_description, full_description, 
+        ai_brief_description, ai_full_description) VALUES ($1, $2, $3, $4, $5, $6)",
+    payload.topic,
+    payload.is_verified,
+    payload.brief_description,
+    payload.full_description,
+    payload.ai_brief_description,
+    payload.ai_full_description,
+    );
+    let insert_result = insert_query.execute(&db_pool).await;
     match insert_result {
         Ok(_insert_result) => "new topic created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
