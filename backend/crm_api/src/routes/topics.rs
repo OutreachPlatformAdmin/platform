@@ -6,6 +6,7 @@ use axum::{
 };
 use serde::{Deserialize, Serialize};
 use sqlx::{query, FromRow, PgPool, Result};
+use crate::helpers::query_utils::process_optional_param;
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Topic {
@@ -62,14 +63,6 @@ pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
         .fetch_all(db_pool)
         .await?;
     Ok(topics)
-}
-
-pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
-    let mut processed_param = vec![];
-    if let Some(populated_param) = param {
-        processed_param = populated_param
-    }
-    processed_param
 }
 
 /*
