@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	// import { page } from '$app/stores';
 	import Tabs from '../../../components/Tabs.svelte';
 	import Examples from './ExampleComponents/Examples/+page.svelte';
 	import Parallels from './ExampleComponents/Parallells/+page.svelte';
