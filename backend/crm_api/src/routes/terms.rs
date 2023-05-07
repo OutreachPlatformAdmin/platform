@@ -1,3 +1,4 @@
+use crate::helpers::handler_utils::{insert_topic_or_term, CreateTopicOrTerm};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -38,12 +39,14 @@ pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Response {
 }
 
 pub async fn get_all_terms(db_pool: &PgPool) -> Result<Vec<Term>> {
-    let terms = sqlx::query_as::<_, Term>("SELECT id, term, is_verified, brief_description,
+    let terms = sqlx::query_as::<_, Term>(
+        "SELECT id, term, is_verified, brief_description,
     full_description, bullet_points, examples, parallels, ai_brief_description, ai_full_description,
     ai_bullet_points, ai_parallels, ai_examples
-    FROM platform.terms")
-        .fetch_all(db_pool)
-        .await?;
+    FROM platform.terms",
+    )
+    .fetch_all(db_pool)
+    .await?;
     Ok(terms)
 }
 
@@ -85,4 +88,22 @@ pub async fn get_all_terms_for_a_topic(db_pool: &PgPool, topic: &str) -> Result<
     .await?;
 
     Ok(terms)
+}
+
+/*
+/new-topic
+Body:
+{
+   "topic": "<new_topic_name>"
+}
+*/
+pub async fn new_term_handler(
+    State(db_pool): State<PgPool>,
+    Json(payload): Json<CreateTopicOrTerm>,
+) -> Response {
+    let insert_result = insert_topic_or_term(payload, "term", &db_pool).await;
+    match insert_result {
+        Ok(_insert_result) => "new term created".into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
 }

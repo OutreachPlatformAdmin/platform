@@ -41,7 +41,7 @@ pub async fn insert_topic_or_term(
         bullet_points, examples, parallels, ai_brief_description, ai_full_description, ai_bullet_points, ai_parallels, 
         ai_examples) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", topic_or_term, topic_or_term);
 
-    let insert_result = sqlx::query(&query_string)
+    let _insert_result = sqlx::query(&query_string)
         .bind(payload.value)
         .bind(payload.is_verified)
         .bind(payload.brief_description)
