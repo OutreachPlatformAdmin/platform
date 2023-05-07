@@ -1,5 +1,7 @@
+use std::os::windows::process;
+
 use serde::Deserialize;
-use sqlx::{FromRow, PgPool, Result};
+use sqlx::{query, FromRow, PgPool, Result};
 
 pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
     let mut processed_param = vec![];
@@ -23,6 +25,9 @@ pub struct CreateTopicOrTerm {
     ai_bullet_points: Option<Vec<String>>,
     ai_parallels: Option<Vec<String>>,
     ai_examples: Option<Vec<String>>,
+    related_terms: Option<Vec<String>>,
+    related_topics: Option<Vec<String>>,
+    related_sources: Option<Vec<String>>,
 }
 
 pub async fn insert_topic_or_term(
@@ -56,6 +61,46 @@ pub async fn insert_topic_or_term(
         .bind(ai_examples.as_slice())
         .execute(db_pool)
         .await;
+
+    Ok(())
+}
+
+pub async fn build_bridge_tables(
+    payload: CreateTopicOrTerm,
+    entity_type: &str,
+    db_pool: &PgPool,
+) -> Result<()> {
+    // first use payload.value to query that table and get the id for the value
+    let get_id_query_str = format!(
+        "SELECT id from platform.{}s where {} = $1",
+        entity_type, entity_type
+    );
+
+    let record = sqlx::query(&get_id_query_str)
+        .bind(payload.value)
+        .fetch_one(db_pool)
+        .await?;
+
+    // you can then access the id via record.id
+
+
+    let related_terms = process_optional_param(payload.related_terms);
+    let related_topics = process_optional_param(payload.related_topics);
+    let related_sources = process_optional_param(payload.related_sources);
+
+    // self-referential data currently not supported for terms
+    if !related_terms.is_empty() && entity_type != "term" {
+        // build a SQL query that puts terms in the IN statement
+        // this should return Result<Vec<?>> -- we have to define the struct... or wait this is query so it will be PgRow
+        let ids = query!("SELECT id from platform.terms where term in ($1)", related_terms.as_slice()).fetch_all(db_pool).await?;
+    }
+    // now get ids of the optional array values 
+    if let Some(related_terms) = payload.related_terms {
+            // you can add in additonal if statements here if needed...
+            // build a SQL query that puts terms in the IN statement
+            let ids = query!("SELECT id from platform.terms where term in ($1)", related_terms.as_slice())
+    }
+
 
     Ok(())
 }

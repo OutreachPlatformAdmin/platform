@@ -62,7 +62,12 @@ pub async fn new_topic_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopicOrTerm>,
 ) -> Response {
+
+
     let insert_result = insert_topic_or_term(payload, "topic", &db_pool).await;
+    // call new function here that builds bridge tables 
+    
+
     match insert_result {
         Ok(_insert_result) => "new topic created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
