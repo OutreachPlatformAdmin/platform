@@ -12,7 +12,7 @@ use axum::{
 };
 use hello_world::hello_world;
 use sqlx::postgres::PgPool;
-use terms::{get_all_terms_for_topic_handler, get_all_terms_handler};
+use terms::{get_all_terms_for_topic_handler, get_all_terms_handler, new_term_handler};
 use topics::{get_all_topics_handler, new_topic_handler};
 
 #[derive(Clone, FromRef)]
@@ -28,5 +28,6 @@ pub fn create_routes(db_pool: PgPool) -> Router {
         .route("/terms", get(get_all_terms_handler))
         .route("/terms-from-topic", get(get_all_terms_for_topic_handler))
         .route("/new-topic", post(new_topic_handler))
+        .route("/new-term", post(new_term_handler))
         .with_state(app_state)
 }
