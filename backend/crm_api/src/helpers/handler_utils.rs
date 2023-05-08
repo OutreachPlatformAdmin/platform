@@ -117,10 +117,10 @@ pub async fn build_bridge_tables(
         )
         .fetch_all(db_pool)
         .await?;
-    
+
         let bridge_table: &str;
-        if let Some(inner_key) = BRIDGE_TABLES.get(entity_type) {
-            if let Some(table_name) = BRIDGE_TABLES.get("term") {
+        if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
+            if let Some(table_name) = inner_hashmap.get("term") {
                 bridge_table = table_name;
             }
         }
