@@ -1,7 +1,9 @@
 use std::os::windows::process;
 
+use lazy_static::lazy_static;
 use serde::Deserialize;
-use sqlx::{query, FromRow, PgPool, Result};
+use sqlx::{postgres::PgRow as Row, query, FromRow, PgPool, Result};
+use std::collections::HashMap;
 
 pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
     let mut processed_param = vec![];
@@ -28,6 +30,22 @@ pub struct CreateTopicOrTerm {
     related_terms: Option<Vec<String>>,
     related_topics: Option<Vec<String>>,
     related_sources: Option<Vec<String>>,
+}
+
+// The lazy_static macro ensures that the HashMap is initialized lazily at runtime, which means that it's only created when it's first accessed.
+lazy_static! {
+    static ref BRIDGE_TABLES: HashMap<&'static str, HashMap<&'static str, &'static str>> = {
+        let mut data = HashMap::new();
+        data.insert(
+            "topic",
+            HashMap::from([("term", "terms_to_topics"), ("source", "topics_to_sources")]),
+        );
+        data.insert(
+            "term",
+            HashMap::from([("topic", "terms_to_topics"), ("source", "terms_to_sources")]),
+        );
+        data
+    };
 }
 
 pub async fn insert_topic_or_term(
@@ -70,37 +88,45 @@ pub async fn build_bridge_tables(
     entity_type: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
+    /*
+    Example query: "What are the terms for this topic"
+     */
+
     // first use payload.value to query that table and get the id for the value
     let get_id_query_str = format!(
         "SELECT id from platform.{}s where {} = $1",
         entity_type, entity_type
     );
-
     let record = sqlx::query(&get_id_query_str)
         .bind(payload.value)
         .fetch_one(db_pool)
         .await?;
-
     // you can then access the id via record.id
-
 
     let related_terms = process_optional_param(payload.related_terms);
     let related_topics = process_optional_param(payload.related_topics);
     let related_sources = process_optional_param(payload.related_sources);
+    let term_ids: Vec<Row>;
 
     // self-referential data currently not supported for terms
     if !related_terms.is_empty() && entity_type != "term" {
         // build a SQL query that puts terms in the IN statement
-        // this should return Result<Vec<?>> -- we have to define the struct... or wait this is query so it will be PgRow
-        let ids = query!("SELECT id from platform.terms where term in ($1)", related_terms.as_slice()).fetch_all(db_pool).await?;
-    }
-    // now get ids of the optional array values 
-    if let Some(related_terms) = payload.related_terms {
-            // you can add in additonal if statements here if needed...
-            // build a SQL query that puts terms in the IN statement
-            let ids = query!("SELECT id from platform.terms where term in ($1)", related_terms.as_slice())
-    }
+        term_ids = query!(
+            "SELECT id from platform.terms where term in ($1)",
+            related_terms.as_slice()
+        )
+        .fetch_all(db_pool)
+        .await?;
+    
+        let bridge_table: &str;
+        if let Some(inner_key) = BRIDGE_TABLES.get(entity_type) {
+            if let Some(table_name) = BRIDGE_TABLES.get("term") {
+                bridge_table = table_name;
+            }
+        }
 
+        // now pull data from the bridge table.
+    }
 
     Ok(())
 }
