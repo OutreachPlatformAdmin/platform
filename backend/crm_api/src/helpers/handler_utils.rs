@@ -2,16 +2,8 @@ use std::os::windows::process;
 
 use lazy_static::lazy_static;
 use serde::Deserialize;
-use sqlx::{postgres::PgRow as Row, query, FromRow, PgPool, Result};
+use sqlx::{postgres::PgRow as Row, query, FromRow, PgPool, Record, Result};
 use std::collections::HashMap;
-
-pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
-    let mut processed_param = vec![];
-    if let Some(populated_param) = param {
-        processed_param = populated_param
-    }
-    processed_param
-}
 
 #[derive(Deserialize, FromRow)]
 pub struct CreateTopicOrTerm {
@@ -30,6 +22,18 @@ pub struct CreateTopicOrTerm {
     related_terms: Option<Vec<String>>,
     related_topics: Option<Vec<String>>,
     related_sources: Option<Vec<String>>,
+}
+#[derive(Deserialize, FromRow)]
+pub struct IdRow {
+    id: i32,
+}
+
+pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
+    let mut processed_param = vec![];
+    if let Some(populated_param) = param {
+        processed_param = populated_param
+    }
+    processed_param
 }
 
 // The lazy_static macro ensures that the HashMap is initialized lazily at runtime, which means that it's only created when it's first accessed.
@@ -97,7 +101,7 @@ pub async fn build_bridge_tables(
         "SELECT id from platform.{}s where {} = $1",
         entity_type, entity_type
     );
-    let record = sqlx::query(&get_id_query_str)
+    let entity_row = sqlx::query_as::<_, IdRow>(&get_id_query_str)
         .bind(payload.value)
         .fetch_one(db_pool)
         .await?;
@@ -106,17 +110,30 @@ pub async fn build_bridge_tables(
     let related_terms = process_optional_param(payload.related_terms);
     let related_topics = process_optional_param(payload.related_topics);
     let related_sources = process_optional_param(payload.related_sources);
-    let term_ids: Vec<Row>;
+    let term_id_rows: Vec<IdRow>;
+    let term_ids: Vec<i32>;
+    /*
+    One big query:
+
+    INSERT INTO platform.{}
+
+     */
 
     // self-referential data currently not supported for terms
     if !related_terms.is_empty() && entity_type != "term" {
         // build a SQL query that puts terms in the IN statement
-        term_ids = query!(
+
+        // this returns a Vec<PgRow>
+        if let Ok(term_id_rows) = sqlx::query_as!(
+            IdRow,
             "SELECT id from platform.terms where term in ($1)",
             related_terms.as_slice()
         )
         .fetch_all(db_pool)
-        .await?;
+        .await
+        {
+            term_ids = term_id_rows.iter().map(|row| row.id).collect();
+        }
 
         let bridge_table: &str;
         if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
@@ -125,7 +142,23 @@ pub async fn build_bridge_tables(
             }
         }
 
-        // now pull data from the bridge table.
+        let mut insert_query_str = format!(
+            "INSERT INTO platform.{} (term_id, topic_id) VALUES ",
+            bridge_table
+        );
+
+        let mut param_index = 1;
+        for term_id in term_ids {
+            insert_query_str.push_str(&format!("(${}, {}),", param_index, entity_row.id));
+            param_index += 1;
+        }
+
+        // Remove the trailing comma and execute the INSERT statement
+        insert_query_str.pop();
+        sqlx::query(&insert_query_str)
+            .bind(&term_ids)
+            .execute(db_pool)
+            .await?;
     }
 
     Ok(())
