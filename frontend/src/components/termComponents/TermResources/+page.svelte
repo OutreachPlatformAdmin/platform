@@ -149,10 +149,10 @@
 		</li>
 	</ul>
 	<!-- List of results -->
-	<ul>
-		<li>
-			<div class="flex rounded-3xl p-5 bg-gray-800 mb-6">
-				<div class="pr-3">
+	<ul class="lg:grid lg:grid-cols-2">
+		<li class="list-none mx-5">
+			<div class="sm:flex rounded-3xl p-5 bg-gray-800 mb-6">
+				<div class="pr-3 max-w-sm mx-auto">
 					<img
 						src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
 						alt=""
@@ -167,7 +167,7 @@
 						Description here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero,
 						facere?
 					</p>
-					<ul class="flex justify-start flex-row flex-wrap">
+					<ul class="flex justify-start flex-row flex-wrap text-xs">
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
@@ -184,9 +184,9 @@
 				</div>
 			</div>
 		</li>
-		<li>
-			<div class="flex rounded-3xl p-5 bg-gray-800 mb-6">
-				<div class="pr-3">
+		<li class="list-none mx-5">
+			<div class="sm:flex rounded-3xl p-5 bg-gray-800 mb-6">
+				<div class="pr-3 max-w-sm mx-auto">
 					<img
 						src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
 						alt=""
@@ -201,7 +201,7 @@
 						Description here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero,
 						facere?
 					</p>
-					<ul class="flex justify-start flex-row flex-wrap">
+					<ul class="flex justify-start flex-row flex-wrap text-xs">
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
@@ -218,9 +218,9 @@
 				</div>
 			</div>
 		</li>
-		<li>
-			<div class="flex rounded-3xl p-5 bg-gray-800 mb-6">
-				<div class="pr-3">
+		<li class="list-none mx-5">
+			<div class="sm:flex rounded-3xl p-5 bg-gray-800 mb-6">
+				<div class="pr-3 max-w-sm mx-auto">
 					<img
 						src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
 						alt=""
@@ -235,7 +235,7 @@
 						Description here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero,
 						facere?
 					</p>
-					<ul class="flex justify-start flex-row flex-wrap">
+					<ul class="flex justify-start flex-row flex-wrap text-xs">
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
@@ -252,9 +252,9 @@
 				</div>
 			</div>
 		</li>
-		<li>
-			<div class="flex rounded-3xl p-5 bg-gray-800 mb-6">
-				<div class="pr-3">
+		<li class="list-none mx-5">
+			<div class="sm:flex rounded-3xl p-5 bg-gray-800 mb-6">
+				<div class="pr-3 max-w-sm mx-auto">
 					<img
 						src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
 						alt=""
@@ -269,7 +269,7 @@
 						Description here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero,
 						facere?
 					</p>
-					<ul class="flex justify-start flex-row flex-wrap">
+					<ul class="flex justify-start flex-row flex-wrap text-xs">
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
 						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
@@ -286,5 +286,40 @@
 				</div>
 			</div>
 		</li>
+		<li class="list-none mx-5">
+			<div class="sm:flex rounded-3xl p-5 bg-gray-800 mb-6">
+				<div class="pr-3 max-w-sm mx-auto">
+					<img
+						src="https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg"
+						alt=""
+						class="w-30 pr-5 rounded-xl"
+					/>
+					<p>Duration:</p>
+				</div>
+				<div class="">
+					<h3 class="text-2xl">Title goes Here</h3>
+					<p class="text-xs">Author goes here</p>
+					<p class="my-4">
+						Description here Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero,
+						facere?
+					</p>
+					<ul class="flex justify-start flex-row flex-wrap text-xs">
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+						<li class="list-none rounded-3xl py-1 px-3 mr-2 bg-red-900">Topic</li>
+					</ul>
+				</div>
+			</div>
+		</li>
+		]
 	</ul>
 </div>
