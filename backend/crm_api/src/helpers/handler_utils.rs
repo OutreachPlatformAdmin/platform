@@ -143,8 +143,8 @@ pub async fn build_bridge_tables(
         }
 
         let mut insert_query_str = format!(
-            "INSERT INTO platform.{} (term_id, topic_id) VALUES ",
-            bridge_table
+            "INSERT INTO platform.{} (term_id, {}_id) VALUES ",
+            bridge_table, entity_type
         );
 
         let mut param_index = 1;
