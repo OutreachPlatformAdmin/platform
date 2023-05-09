@@ -1,4 +1,4 @@
-use crate::helpers::handler_utils::{insert_topic_or_term, CreateTopicOrTerm};
+use crate::helpers::handler_utils::{build_bridge_tables, insert_topic_or_term, CreateTopicOrTerm};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -62,11 +62,9 @@ pub async fn new_topic_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopicOrTerm>,
 ) -> Response {
-
-
-    let insert_result = insert_topic_or_term(payload, "topic", &db_pool).await;
-    // call new function here that builds bridge tables 
-    
+    let insert_result = insert_topic_or_term(&payload, "topic", &db_pool).await;
+    // todo: look up how I can do error handling for both of these function calls since they both return Result
+    let other_insert_result = build_bridge_tables(&payload, "topic", &db_pool).await;
 
     match insert_result {
         Ok(_insert_result) => "new topic created".into_response(),

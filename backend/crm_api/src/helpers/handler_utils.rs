@@ -28,10 +28,10 @@ pub struct IdRow {
     id: i32,
 }
 
-pub fn process_optional_param(param: Option<Vec<String>>) -> Vec<String> {
+pub fn process_optional_param(param: &Option<Vec<String>>) -> Vec<String> {
     let mut processed_param = vec![];
     if let Some(populated_param) = param {
-        processed_param = populated_param
+        processed_param = *populated_param
     }
     processed_param
 }
@@ -53,31 +53,31 @@ lazy_static! {
 }
 
 pub async fn insert_topic_or_term(
-    payload: CreateTopicOrTerm,
+    payload: &CreateTopicOrTerm,
     topic_or_term: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
-    let bullet_points = process_optional_param(payload.bullet_points);
-    let examples = process_optional_param(payload.examples);
-    let parallels = process_optional_param(payload.parallels);
-    let ai_bullet_points = process_optional_param(payload.ai_bullet_points);
-    let ai_parallels = process_optional_param(payload.ai_parallels);
-    let ai_examples = process_optional_param(payload.ai_examples);
+    let bullet_points = process_optional_param(&payload.bullet_points);
+    let examples = process_optional_param(&payload.examples);
+    let parallels = process_optional_param(&payload.parallels);
+    let ai_bullet_points = process_optional_param(&payload.ai_bullet_points);
+    let ai_parallels = process_optional_param(&payload.ai_parallels);
+    let ai_examples = process_optional_param(&payload.ai_examples);
 
     let query_string = format!("INSERT INTO platform.{}s ({}, is_verified, brief_description, full_description, 
         bullet_points, examples, parallels, ai_brief_description, ai_full_description, ai_bullet_points, ai_parallels, 
         ai_examples) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", topic_or_term, topic_or_term);
 
     let _insert_result = sqlx::query(&query_string)
-        .bind(payload.value)
-        .bind(payload.is_verified)
-        .bind(payload.brief_description)
-        .bind(payload.full_description)
+        .bind(&payload.value)
+        .bind(&payload.is_verified)
+        .bind(&payload.brief_description)
+        .bind(&payload.full_description)
         .bind(bullet_points.as_slice())
         .bind(examples.as_slice())
         .bind(parallels.as_slice())
-        .bind(payload.ai_brief_description)
-        .bind(payload.ai_full_description)
+        .bind(&payload.ai_brief_description)
+        .bind(&payload.ai_full_description)
         .bind(ai_bullet_points.as_slice())
         .bind(ai_parallels.as_slice())
         .bind(ai_examples.as_slice())
@@ -88,7 +88,7 @@ pub async fn insert_topic_or_term(
 }
 
 pub async fn build_bridge_tables(
-    payload: CreateTopicOrTerm,
+    payload: &CreateTopicOrTerm,
     entity_type: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
@@ -102,28 +102,22 @@ pub async fn build_bridge_tables(
         entity_type, entity_type
     );
     let entity_row = sqlx::query_as::<_, IdRow>(&get_id_query_str)
-        .bind(payload.value)
+        .bind(&payload.value)
         .fetch_one(db_pool)
         .await?;
     // you can then access the id via record.id
 
-    let related_terms = process_optional_param(payload.related_terms);
-    let related_topics = process_optional_param(payload.related_topics);
-    let related_sources = process_optional_param(payload.related_sources);
+    let related_terms = process_optional_param(&payload.related_terms);
+    let related_topics = process_optional_param(&payload.related_topics);
+    let related_sources = process_optional_param(&payload.related_sources);
     let term_id_rows: Vec<IdRow>;
     let term_ids: Vec<i32>;
-    /*
-    One big query:
-
-    INSERT INTO platform.{}
-
-     */
 
     // self-referential data currently not supported for terms
     if !related_terms.is_empty() && entity_type != "term" {
         // build a SQL query that puts terms in the IN statement
 
-        // this returns a Vec<PgRow>
+        // this returns a Result<Vec<PgRow>>
         if let Ok(term_id_rows) = sqlx::query_as!(
             IdRow,
             "SELECT id from platform.terms where term in ($1)",
