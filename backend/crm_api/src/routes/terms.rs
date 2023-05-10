@@ -1,4 +1,4 @@
-use crate::helpers::handler_utils::{insert_topic_or_term, CreateTopicOrTerm};
+use crate::helpers::handler_utils::{build_bridge_tables, insert_topic_or_term, CreateTopicOrTerm};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -101,7 +101,8 @@ pub async fn new_term_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateTopicOrTerm>,
 ) -> Response {
-    let insert_result = insert_topic_or_term(payload, "term", &db_pool).await;
+    let insert_result = insert_topic_or_term(&payload, "term", &db_pool).await;
+    let _other_insert_result = build_bridge_tables(&payload, "term", &db_pool).await;
     match insert_result {
         Ok(_insert_result) => "new term created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
