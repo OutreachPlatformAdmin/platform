@@ -91,10 +91,6 @@ pub async fn build_bridge_tables(
     entity_type: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
-    /*
-    Example query: "What are the terms for this topic"
-     */
-
     // first use payload.value to query that table and get the id for the value
     let get_id_query_str = format!(
         "SELECT id from platform.{}s where {} = $1",
@@ -104,20 +100,19 @@ pub async fn build_bridge_tables(
         .bind(&payload.value)
         .fetch_one(db_pool)
         .await?;
-    // you can then access the id via record.id
 
     let related_terms = process_optional_param(&payload.related_terms);
     let related_terms_str = related_terms.join(",");
     let related_topics = process_optional_param(&payload.related_topics);
-    let related_sources = process_optional_param(&payload.related_sources);
-    let term_id_rows: Vec<IdRow>;
+    let related_topics_str = related_topics.join(",");
+    // TODO: implement sources logic.
+    let _related_sources = process_optional_param(&payload.related_sources);
     let term_ids: Vec<i32>;
+    let topic_ids: Vec<i32>;
 
     // self-referential data currently not supported for terms
     if !related_terms.is_empty() && entity_type != "term" {
-        // build a SQL query that puts terms in the IN statement
-
-        // this returns a Result<Vec<PgRow>>
+        // term_id_rows is of type Vec<IdRow>
         if let Ok(term_id_rows) = sqlx::query_as!(
             IdRow,
             "SELECT id from platform.terms where term in ($1)",
@@ -138,6 +133,36 @@ pub async fn build_bridge_tables(
                     for term_id in &term_ids {
                         sqlx::query(&insert_query_str)
                             .bind(term_id)
+                            .execute(db_pool)
+                            .await?;
+                    }
+                }
+            }
+        }
+    }
+    // TODO: probably should create another helper function since a lot of this logic is duplicated
+    // TODO: add support for adding self-referential topics
+    if !related_topics.is_empty() && entity_type != "topic" {
+        if let Ok(topic_id_rows) = sqlx::query_as!(
+            IdRow,
+            "SELECT id from platform.topics where topic in ($1)",
+            related_topics_str
+        )
+        .fetch_all(db_pool)
+        .await
+        {
+            topic_ids = topic_id_rows.iter().map(|row| row.id).collect();
+            let bridge_table: &str;
+            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
+                if let Some(table_name) = inner_hashmap.get("topic") {
+                    bridge_table = table_name;
+                    let insert_query_str = format!(
+                        "INSERT INTO platform.{} (topic_id, {}_id) VALUES ($1, {})",
+                        bridge_table, entity_type, entity_row.id
+                    );
+                    for topic_id in &topic_ids {
+                        sqlx::query(&insert_query_str)
+                            .bind(topic_id)
                             .execute(db_pool)
                             .await?;
                     }
