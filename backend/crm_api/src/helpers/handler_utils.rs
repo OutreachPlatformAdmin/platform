@@ -1,8 +1,6 @@
-use std::os::windows::process;
-
 use lazy_static::lazy_static;
 use serde::Deserialize;
-use sqlx::{postgres::PgRow as Row, query, FromRow, PgPool, Record, Result};
+use sqlx::{FromRow, PgPool, Result};
 use std::collections::HashMap;
 
 #[derive(Deserialize, FromRow)]
@@ -31,7 +29,8 @@ pub struct IdRow {
 pub fn process_optional_param(param: &Option<Vec<String>>) -> Vec<String> {
     let mut processed_param = vec![];
     if let Some(populated_param) = param {
-        processed_param = *populated_param
+        // TODO: come back and update this method to output a reference instead
+        processed_param = populated_param.clone()
     }
     processed_param
 }
@@ -108,6 +107,7 @@ pub async fn build_bridge_tables(
     // you can then access the id via record.id
 
     let related_terms = process_optional_param(&payload.related_terms);
+    let related_terms_str = related_terms.join(",");
     let related_topics = process_optional_param(&payload.related_topics);
     let related_sources = process_optional_param(&payload.related_sources);
     let term_id_rows: Vec<IdRow>;
@@ -121,38 +121,29 @@ pub async fn build_bridge_tables(
         if let Ok(term_id_rows) = sqlx::query_as!(
             IdRow,
             "SELECT id from platform.terms where term in ($1)",
-            related_terms.as_slice()
+            related_terms_str
         )
         .fetch_all(db_pool)
         .await
         {
             term_ids = term_id_rows.iter().map(|row| row.id).collect();
-        }
-
-        let bridge_table: &str;
-        if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-            if let Some(table_name) = inner_hashmap.get("term") {
-                bridge_table = table_name;
+            let bridge_table: &str;
+            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
+                if let Some(table_name) = inner_hashmap.get("term") {
+                    bridge_table = table_name;
+                    let insert_query_str = format!(
+                        "INSERT INTO platform.{} (term_id, {}_id) VALUES ($1, {})",
+                        bridge_table, entity_type, entity_row.id
+                    );
+                    for term_id in &term_ids {
+                        sqlx::query(&insert_query_str)
+                            .bind(term_id)
+                            .execute(db_pool)
+                            .await?;
+                    }
+                }
             }
         }
-
-        let mut insert_query_str = format!(
-            "INSERT INTO platform.{} (term_id, {}_id) VALUES ",
-            bridge_table, entity_type
-        );
-
-        let mut param_index = 1;
-        for term_id in term_ids {
-            insert_query_str.push_str(&format!("(${}, {}),", param_index, entity_row.id));
-            param_index += 1;
-        }
-
-        // Remove the trailing comma and execute the INSERT statement
-        insert_query_str.pop();
-        sqlx::query(&insert_query_str)
-            .bind(&term_ids)
-            .execute(db_pool)
-            .await?;
     }
 
     Ok(())
