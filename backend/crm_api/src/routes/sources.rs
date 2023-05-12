@@ -103,19 +103,6 @@ pub async fn new_source_handler(
     }
 }
 
-/*
-pub struct CreateSource {
-    name: Option<String>,
-    url: Option<String>,
-    author: Option<String>,
-    author_url: Option<String>,
-    media_type: Option<MediaType>,
-    image_url: Option<String>,
-    image_type: Option<ImageType>,
-    ai_generated: Option<bool>,
-}
- */
-
 pub async fn insert_source(
     payload: &CreateSource,
     db_pool: &PgPool,
