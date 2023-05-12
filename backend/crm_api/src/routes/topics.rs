@@ -55,7 +55,7 @@ pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
 /new-topic
 Body:
 {
-   "topic": "<new_topic_name>"
+   "value": "<new_topic_name>"
 }
 */
 pub async fn new_topic_handler(
