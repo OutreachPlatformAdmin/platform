@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 body {
-    padding: 2rem;
-    /* max-width: 1500px; */
-    margin: auto;
+	padding: 2rem;
+	/* max-width: 1500px; */
+	margin: auto;
 }
 
 
 
 h1 {
-    line-height: 1;
-    text-transform: capitalize;
+	line-height: 1;
+	text-transform: capitalize;
 }
