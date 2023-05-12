@@ -26,7 +26,7 @@ pub struct IdRow {
     id: i32,
 }
 
-pub fn process_optional_param(param: &Option<Vec<String>>) -> Vec<String> {
+pub fn process_optional_vec(param: &Option<Vec<String>>) -> Vec<String> {
     let mut processed_param = vec![];
     if let Some(populated_param) = param {
         // TODO: come back and update this method to output a reference instead
@@ -56,12 +56,12 @@ pub async fn insert_topic_or_term(
     topic_or_term: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
-    let bullet_points = process_optional_param(&payload.bullet_points);
-    let examples = process_optional_param(&payload.examples);
-    let parallels = process_optional_param(&payload.parallels);
-    let ai_bullet_points = process_optional_param(&payload.ai_bullet_points);
-    let ai_parallels = process_optional_param(&payload.ai_parallels);
-    let ai_examples = process_optional_param(&payload.ai_examples);
+    let bullet_points = process_optional_vec(&payload.bullet_points);
+    let examples = process_optional_vec(&payload.examples);
+    let parallels = process_optional_vec(&payload.parallels);
+    let ai_bullet_points = process_optional_vec(&payload.ai_bullet_points);
+    let ai_parallels = process_optional_vec(&payload.ai_parallels);
+    let ai_examples = process_optional_vec(&payload.ai_examples);
 
     let query_string = format!("INSERT INTO platform.{}s ({}, is_verified, brief_description, full_description, 
         bullet_points, examples, parallels, ai_brief_description, ai_full_description, ai_bullet_points, ai_parallels, 
@@ -101,12 +101,12 @@ pub async fn build_bridge_tables(
         .fetch_one(db_pool)
         .await?;
 
-    let related_terms = process_optional_param(&payload.related_terms);
+    let related_terms = process_optional_vec(&payload.related_terms);
     let related_terms_str = related_terms.join(",");
-    let related_topics = process_optional_param(&payload.related_topics);
+    let related_topics = process_optional_vec(&payload.related_topics);
     let related_topics_str = related_topics.join(",");
     // TODO: implement sources logic.
-    let _related_sources = process_optional_param(&payload.related_sources);
+    let _related_sources = process_optional_vec(&payload.related_sources);
     let term_ids: Vec<i32>;
     let topic_ids: Vec<i32>;
 
