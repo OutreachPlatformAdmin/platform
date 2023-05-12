@@ -52,6 +52,11 @@ pub struct CreateSource {
     ai_generated: Option<bool>,
 }
 
+#[derive(Deserialize)]
+pub struct GetSourceQueryParams {
+    id: i32,
+}
+
 /*
  /sources
 - returns all sources
@@ -95,7 +100,7 @@ pub async fn new_source_handler(
     State(db_pool): State<PgPool>,
     Json(payload): Json<CreateSource>,
 ) -> Response {
-    let insert_result = insert_source(&payload,  &db_pool).await;
+    let insert_result = insert_source(&payload, &db_pool).await;
     // todo: update bridge tables when a new source is created as well
     match insert_result {
         Ok(_insert_result) => "new source created".into_response(),
@@ -103,11 +108,9 @@ pub async fn new_source_handler(
     }
 }
 
-pub async fn insert_source(
-    payload: &CreateSource,
-    db_pool: &PgPool,
-) -> Result<()> {
-    let _insert_result = sqlx::query("
+pub async fn insert_source(payload: &CreateSource, db_pool: &PgPool) -> Result<()> {
+    let _insert_result = sqlx::query(
+        "
                 INSERT INTO platform.sources 
                     (name,
                     url,
@@ -117,17 +120,37 @@ pub async fn insert_source(
                     image_url,
                     image_type,
                     ai_generated) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)")
-        .bind(&payload.name)
-        .bind(&payload.url)
-        .bind(&payload.author)
-        .bind(&payload.author_url)
-        .bind(&payload.media_type)
-        .bind(&payload.image_url)
-        .bind(&payload.image_type)
-        .bind(&payload.ai_generated)
-        .execute(db_pool)
-        .await;
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+    )
+    .bind(&payload.name)
+    .bind(&payload.url)
+    .bind(&payload.author)
+    .bind(&payload.author_url)
+    .bind(&payload.media_type)
+    .bind(&payload.image_url)
+    .bind(&payload.image_type)
+    .bind(&payload.ai_generated)
+    .execute(db_pool)
+    .await;
 
     Ok(())
+}
+
+pub async fn get_source_handler(
+    State(db_pool): State<PgPool>,
+    params: axum::extract::Query<GetSourceQueryParams>,
+) -> Response {
+    let source = get_source(&db_pool, &params.id).await;
+    match source {
+        Ok(source) => (StatusCode::OK, Json(source)).into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
+}
+
+pub async fn get_source(db_pool: &PgPool, id: &i32) -> Result<Source> {
+    let source = sqlx::query_as::<_, Source>("SELECT * from platform.sources where id = $1")
+        .bind(id)
+        .fetch_one(db_pool)
+        .await?;
+    Ok(source)
 }

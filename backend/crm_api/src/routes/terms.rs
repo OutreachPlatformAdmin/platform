@@ -26,8 +26,13 @@ pub struct Term {
 }
 
 #[derive(Deserialize)]
-pub struct QueryParams {
+pub struct AllTermsQueryParams {
     topic: String,
+}
+
+#[derive(Deserialize)]
+pub struct GetTermQueryParams {
+    id: i32,
 }
 
 pub async fn get_all_terms_handler(State(db_pool): State<PgPool>) -> Response {
@@ -58,7 +63,7 @@ http://localhost:3000/terms-from-topic?topic=neoliberalism
  */
 pub async fn get_all_terms_for_topic_handler(
     State(db_pool): State<PgPool>,
-    params: axum::extract::Query<QueryParams>,
+    params: axum::extract::Query<AllTermsQueryParams>,
 ) -> Response {
     let terms = get_all_terms_for_a_topic(&db_pool, &params.topic).await;
 
@@ -107,4 +112,22 @@ pub async fn new_term_handler(
         Ok(_insert_result) => "new term created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
     }
+}
+
+pub async fn get_term_handler(
+    State(db_pool): State<PgPool>,
+    params: axum::extract::Query<GetTermQueryParams>,
+) -> Response {
+    let term = get_term(&db_pool, &params.id).await;
+    match term {
+        Ok(term) => (StatusCode::OK, Json(term)).into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
+}
+
+pub async fn get_term(db_pool: &PgPool, id: &i32) -> Result<Term> {
+    let term = sqlx::query_as!(Term, "SELECT * from platform.terms where id = $1", id)
+        .fetch_one(db_pool)
+        .await?;
+    Ok(term)
 }

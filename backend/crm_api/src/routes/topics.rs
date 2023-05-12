@@ -25,6 +25,11 @@ pub struct Topic {
     ai_examples: Option<Vec<String>>,
 }
 
+#[derive(Deserialize)]
+pub struct GetTopicQueryParams {
+    id: i32,
+}
+
 /*
  /topics
 - returns all topics
@@ -69,4 +74,23 @@ pub async fn new_topic_handler(
         Ok(_insert_result) => "new topic created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
     }
+}
+
+
+pub async fn get_topic_handler(
+    State(db_pool): State<PgPool>,
+    params: axum::extract::Query<GetTopicQueryParams>,
+) -> Response {
+    let topic = get_topic(&db_pool, &params.id).await;
+    match topic {
+        Ok(topic) => (StatusCode::OK, Json(topic)).into_response(),
+        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    }
+}
+
+pub async fn get_topic(db_pool: &PgPool, id: &i32) -> Result<Topic> {
+    let topic = sqlx::query_as!(Topic, "SELECT * from platform.topics where id = $1", id)
+        .fetch_one(db_pool)
+        .await?;
+    Ok(topic)
 }
