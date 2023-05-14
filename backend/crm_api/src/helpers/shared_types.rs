@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::FromRow;
+use sqlx::{FromRow, Type};
 
 #[derive(Type, Serialize, Deserialize)]
 #[sqlx(type_name = "media_type", rename_all = "lowercase")]

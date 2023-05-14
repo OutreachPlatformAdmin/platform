@@ -7,7 +7,7 @@ use axum::{
     Json,
 };
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, PgPool, Result, Type};
+use sqlx::{FromRow, PgPool, Result};
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Source {

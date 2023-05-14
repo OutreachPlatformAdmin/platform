@@ -1,4 +1,4 @@
-use crate::helpers::shared_types::{CreateSource, ImageType, MediaType};
+use crate::helpers::shared_types::CreateSource;
 use lazy_static::lazy_static;
 use serde::Deserialize;
 use sqlx::{FromRow, PgPool, Result};
@@ -92,6 +92,10 @@ lazy_static! {
             "term",
             HashMap::from([("topic", "terms_to_topics"), ("source", "terms_to_sources")]),
         );
+        data.insert(
+            "source",
+            HashMap::from([("term", "terms_to_sources"), ("topic", "topics_to_sources")]),
+        );
         data
     };
 }
@@ -134,29 +138,36 @@ pub async fn insert_topic_or_term(
 // payload can either be CreateTopicOrTerm or CreateSource
 // in order for &T to work, I need to define shared behavior:
 // each struct has .name, .related_sources, .related_terms, .related_topics fields
-pub async fn build_bridge_tables<T>(
+pub async fn build_bridge_tables<T: CreateEntity>(
     payload: &T,
     entity_type: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
     // first use payload.value to query that table and get the id for the value
-    let get_id_query_str = format!(
-        "SELECT id from platform.{}s where {} = $1",
-        entity_type, entity_type
-    );
+    let get_id_query_str: String;
+    if entity_type == "source" {
+        get_id_query_str = format!("SELECT id from platform.{}s where name = $1", entity_type);
+    } else {
+        get_id_query_str = format!(
+            "SELECT id from platform.{}s where {} = $1",
+            entity_type, entity_type
+        );
+    }
     let entity_row = sqlx::query_as::<_, IdRow>(&get_id_query_str)
-        .bind(&payload.name)
+        .bind(&payload.name())
         .fetch_one(db_pool)
         .await?;
 
-    let related_terms = process_optional_vec(&payload.related_terms);
+    let related_terms = process_optional_vec(&payload.related_terms());
     let related_terms_str = related_terms.join(",");
-    let related_topics = process_optional_vec(&payload.related_topics);
+    let related_topics = process_optional_vec(&payload.related_topics());
     let related_topics_str = related_topics.join(",");
     // TODO: implement sources logic.
-    let _related_sources = process_optional_vec(&payload.related_sources);
+    let related_sources = process_optional_vec(&payload.related_sources());
+    let related_sources_str = related_sources.join(",");
     let term_ids: Vec<i32>;
     let topic_ids: Vec<i32>;
+    let source_ids: Vec<i32>;
 
     // self-referential data currently not supported for terms
     if !related_terms.is_empty() && entity_type != "term" {
@@ -211,6 +222,34 @@ pub async fn build_bridge_tables<T>(
                     for topic_id in &topic_ids {
                         sqlx::query(&insert_query_str)
                             .bind(topic_id)
+                            .execute(db_pool)
+                            .await?;
+                    }
+                }
+            }
+        }
+    }
+    if !related_sources.is_empty() && entity_type != "source" {
+        if let Ok(source_id_rows) = sqlx::query_as!(
+            IdRow,
+            "SELECT id from platform.sources where name in ($1)",
+            related_sources_str
+        )
+        .fetch_all(db_pool)
+        .await
+        {
+            source_ids = source_id_rows.iter().map(|row| row.id).collect();
+            let bridge_table: &str;
+            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
+                if let Some(table_name) = inner_hashmap.get("source") {
+                    bridge_table = table_name;
+                    let insert_query_str = format!(
+                        "INSERT INTO platform.{} (source_id, {}_id) VALUES ($1, {})",
+                        bridge_table, entity_type, entity_row.id
+                    );
+                    for source_id in &source_ids {
+                        sqlx::query(&insert_query_str)
+                            .bind(source_id)
                             .execute(db_pool)
                             .await?;
                     }
