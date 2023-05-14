@@ -60,7 +60,7 @@ pub async fn get_all_topics(db_pool: &PgPool) -> Result<Vec<Topic>> {
 /new-topic
 Body:
 {
-   "value": "<new_topic_name>"
+   "name": "<new_topic_name>"
 }
 */
 pub async fn new_topic_handler(
@@ -75,7 +75,6 @@ pub async fn new_topic_handler(
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
     }
 }
-
 
 pub async fn get_topic_handler(
     State(db_pool): State<PgPool>,
