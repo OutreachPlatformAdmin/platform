@@ -135,9 +135,6 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
-// payload can either be CreateTopicOrTerm or CreateSource
-// in order for &T to work, I need to define shared behavior:
-// each struct has .name, .related_sources, .related_terms, .related_topics fields
 pub async fn build_bridge_tables<T: CreateEntity>(
     payload: &T,
     entity_type: &str,
