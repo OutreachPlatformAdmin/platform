@@ -7,7 +7,7 @@ use std::collections::HashMap;
 #[derive(Deserialize, FromRow)]
 pub struct CreateTopicOrTerm {
     name: String,
-    is_verified: Option<bool>,
+    is_verified: bool,
     brief_description: Option<String>,
     full_description: Option<String>,
     bullet_points: Option<Vec<String>>,
