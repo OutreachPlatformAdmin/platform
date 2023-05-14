@@ -1,3 +1,4 @@
+use crate::helpers::shared_types::{CreateSource, ImageType, MediaType};
 use lazy_static::lazy_static;
 use serde::Deserialize;
 use sqlx::{FromRow, PgPool, Result};
@@ -5,7 +6,7 @@ use std::collections::HashMap;
 
 #[derive(Deserialize, FromRow)]
 pub struct CreateTopicOrTerm {
-    value: String,
+    name: String,
     is_verified: Option<bool>,
     brief_description: Option<String>,
     full_description: Option<String>,
@@ -21,9 +22,53 @@ pub struct CreateTopicOrTerm {
     related_topics: Option<Vec<String>>,
     related_sources: Option<Vec<String>>,
 }
+
 #[derive(Deserialize, FromRow)]
 pub struct IdRow {
     id: i32,
+}
+
+pub trait CreateEntity {
+    fn name(&self) -> &String;
+    fn related_terms(&self) -> &Option<Vec<String>>;
+    fn related_topics(&self) -> &Option<Vec<String>>;
+    fn related_sources(&self) -> &Option<Vec<String>>;
+}
+
+impl CreateEntity for CreateTopicOrTerm {
+    fn name(&self) -> &String {
+        &self.name
+    }
+
+    fn related_terms(&self) -> &Option<Vec<String>> {
+        &self.related_terms
+    }
+
+    fn related_topics(&self) -> &Option<Vec<String>> {
+        &self.related_topics
+    }
+
+    fn related_sources(&self) -> &Option<Vec<String>> {
+        &self.related_sources
+    }
+}
+
+impl CreateEntity for CreateSource {
+    fn name(&self) -> &String {
+        &self.name
+    }
+
+    fn related_terms(&self) -> &Option<Vec<String>> {
+        &self.related_terms
+    }
+
+    fn related_topics(&self) -> &Option<Vec<String>> {
+        &self.related_topics
+    }
+
+    fn related_sources(&self) -> &Option<Vec<String>> {
+        &self.related_sources
+    }
 }
 
 pub fn process_optional_vec(param: &Option<Vec<String>>) -> Vec<String> {
@@ -68,7 +113,7 @@ pub async fn insert_topic_or_term(
         ai_examples) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", topic_or_term, topic_or_term);
 
     let _insert_result = sqlx::query(&query_string)
-        .bind(&payload.value)
+        .bind(&payload.name)
         .bind(&payload.is_verified)
         .bind(&payload.brief_description)
         .bind(&payload.full_description)
@@ -86,8 +131,11 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
-pub async fn build_bridge_tables(
-    payload: &CreateTopicOrTerm,
+// payload can either be CreateTopicOrTerm or CreateSource
+// in order for &T to work, I need to define shared behavior:
+// each struct has .name, .related_sources, .related_terms, .related_topics fields
+pub async fn build_bridge_tables<T>(
+    payload: &T,
     entity_type: &str,
     db_pool: &PgPool,
 ) -> Result<()> {
@@ -97,7 +145,7 @@ pub async fn build_bridge_tables(
         entity_type, entity_type
     );
     let entity_row = sqlx::query_as::<_, IdRow>(&get_id_query_str)
-        .bind(&payload.value)
+        .bind(&payload.name)
         .fetch_one(db_pool)
         .await?;
 

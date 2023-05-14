@@ -1,3 +1,5 @@
+use crate::helpers::handler_utils::build_bridge_tables;
+use crate::helpers::shared_types::{CreateSource, ImageType, MediaType};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -7,41 +9,9 @@ use axum::{
 use serde::{Deserialize, Serialize};
 use sqlx::{FromRow, PgPool, Result, Type};
 
-#[derive(Type, Serialize, Deserialize)]
-#[sqlx(type_name = "media_type", rename_all = "lowercase")]
-pub enum MediaType {
-    Audio,
-    Video,
-    Web,
-    Book,
-    ScientificArticle,
-}
-
-#[derive(Type, Serialize, Deserialize)]
-#[sqlx(type_name = "image_type", rename_all = "lowercase")]
-pub enum ImageType {
-    PDF,
-    PNG,
-    TIFF,
-    JPEG,
-    GIF,
-}
-
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Source {
     id: i32,
-    name: Option<String>,
-    url: Option<String>,
-    author: Option<String>,
-    author_url: Option<String>,
-    media_type: Option<MediaType>,
-    image_url: Option<String>,
-    image_type: Option<ImageType>,
-    ai_generated: Option<bool>,
-}
-
-#[derive(Deserialize, FromRow)]
-pub struct CreateSource {
     name: Option<String>,
     url: Option<String>,
     author: Option<String>,
@@ -102,6 +72,7 @@ pub async fn new_source_handler(
 ) -> Response {
     let insert_result = insert_source(&payload, &db_pool).await;
     // todo: update bridge tables when a new source is created as well
+    let _other_insert_result = build_bridge_tables(&payload, "source", &db_pool).await;
     match insert_result {
         Ok(_insert_result) => "new source created".into_response(),
         Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),

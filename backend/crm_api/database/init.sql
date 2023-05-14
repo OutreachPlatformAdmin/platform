@@ -11,7 +11,7 @@ CREATE TYPE image_type AS ENUM ('pdf', 'png', 'tiff', 'jpeg', 'gif');
 
 CREATE TABLE platform.sources (
 	id serial NOT NULL,
-	name text,
+	name text NOT NULL,
 	url text,
 	author text,
 	author_url text,
@@ -156,9 +156,9 @@ CREATE TABLE platform.related_topics (
 
 -- we don't need to specify the `id` column bc it is serial 
 -- so it will auto-increment
-INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://www.merriam-webster.com/dictionary/austerity', 'web', 'false');
-INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Neoliberalism', 'web', 'false');
-INSERT INTO platform.sources (url, media_type, ai_generated) VALUES ('https://en.wikipedia.org/wiki/Capitalism', 'web', 'false');
+INSERT INTO platform.sources (name, url, media_type, ai_generated) VALUES ('dictionary austerity', 'https://www.merriam-webster.com/dictionary/austerity', 'web', 'false');
+INSERT INTO platform.sources (name, url, media_type, ai_generated) VALUES ('wikipedia neoliberalism', 'https://en.wikipedia.org/wiki/Neoliberalism', 'web', 'false');
+INSERT INTO platform.sources (name, url, media_type, ai_generated) VALUES ('wikipedia capitalism', 'https://en.wikipedia.org/wiki/Capitalism', 'web', 'false');
 
 INSERT INTO platform.topics (topic, brief_description) VALUES ('capitalism', ' an economic system based on the private ownership of the means of production and their operation for profit.');
 
