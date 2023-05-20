@@ -24,15 +24,6 @@ pub struct CreateTopicOrTerm {
 }
 
 #[derive(Deserialize, FromRow)]
-pub struct CreateLink {
-    entity_type: String,
-    parent_id: i32,
-    related_term_ids: Option<Vec<i32>>,
-    related_topic_ids: Option<Vec<i32>>,
-    related_source_ids: Option<Vec<i32>>,
-}
-
-#[derive(Deserialize, FromRow)]
 pub struct IdRow {
     id: i32,
 }
@@ -109,9 +100,6 @@ lazy_static! {
     };
 }
 
-
-
-
 pub async fn insert_topic_or_term(
     payload: &CreateTopicOrTerm,
     topic_or_term: &str,
@@ -150,8 +138,13 @@ pub async fn insert_topic_or_term(
 /*
 let's assume the example code I took this from is parent_entity_type: topic, child_entity_type: source
  */
-pub async fn update_bridge_table(parent_entity_type: &str, child_entity_type: &str, parent_id: &i32, 
-        child_ids: &Vec<i32>, db_pool: &PgPool) {
+pub async fn update_bridge_table(
+    parent_entity_type: &str,
+    child_entity_type: &str,
+    parent_id: &i32,
+    child_ids: &Vec<i32>,
+    db_pool: &PgPool,
+) -> Result<()> {
     let bridge_table: &str;
     if let Some(inner_hashmap) = BRIDGE_TABLES.get(parent_entity_type) {
         if let Some(table_name) = inner_hashmap.get(child_entity_type) {
@@ -168,6 +161,7 @@ pub async fn update_bridge_table(parent_entity_type: &str, child_entity_type: &s
             }
         }
     }
+    Ok(())
 }
 
 pub async fn build_bridge_tables<T: CreateEntity>(
@@ -270,35 +264,11 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             source_ids = source_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("source") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (source_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for source_id in &source_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(source_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            // note: I'm not going to match on the error here, such that it will bubble up to the handler function.
+            // in the handler function I should match on the Result, and if error, return an error Response (Axum)
+            update_bridge_table(entity_type, "source", &entity_row.id, &source_ids, db_pool)
+                .await?;
         }
     }
-
     Ok(())
 }
-
-
-/*
-Define new function here, though it will probably be a wrapper of the helper functions 
-I pull out of build_bridge_tables
- */
-pub async fn build_bridge_tables(
-    payload: &CreateLink,
-    entity_type: &str,
-    db_pool: &PgPool,
-) -> Result<()> {
