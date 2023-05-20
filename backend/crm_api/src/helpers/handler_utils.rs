@@ -24,6 +24,15 @@ pub struct CreateTopicOrTerm {
 }
 
 #[derive(Deserialize, FromRow)]
+pub struct CreateLink {
+    entity_type: String,
+    parent_id: i32,
+    related_term_ids: Option<Vec<i32>>,
+    related_topic_ids: Option<Vec<i32>>,
+    related_source_ids: Option<Vec<i32>>,
+}
+
+#[derive(Deserialize, FromRow)]
 pub struct IdRow {
     id: i32,
 }
@@ -100,6 +109,9 @@ lazy_static! {
     };
 }
 
+
+
+
 pub async fn insert_topic_or_term(
     payload: &CreateTopicOrTerm,
     topic_or_term: &str,
@@ -135,6 +147,29 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
+/*
+let's assume the example code I took this from is parent_entity_type: topic, child_entity_type: source
+ */
+pub async fn update_bridge_table(parent_entity_type: &str, child_entity_type: &str, parent_id: &i32, 
+        child_ids: &Vec<i32>, db_pool: &PgPool) {
+    let bridge_table: &str;
+    if let Some(inner_hashmap) = BRIDGE_TABLES.get(parent_entity_type) {
+        if let Some(table_name) = inner_hashmap.get(child_entity_type) {
+            bridge_table = table_name;
+            let insert_query_str = format!(
+                "INSERT INTO platform.{} ({}_id, {}_id) VALUES ($1, {})",
+                bridge_table, child_entity_type, parent_entity_type, parent_id
+            );
+            for child_id in child_ids {
+                sqlx::query(&insert_query_str)
+                    .bind(child_id)
+                    .execute(db_pool)
+                    .await?;
+            }
+        }
+    }
+}
+
 pub async fn build_bridge_tables<T: CreateEntity>(
     payload: &T,
     entity_type: &str,
@@ -159,7 +194,6 @@ pub async fn build_bridge_tables<T: CreateEntity>(
     let related_terms_str = related_terms.join(",");
     let related_topics = process_optional_vec(&payload.related_topics());
     let related_topics_str = related_topics.join(",");
-    // TODO: implement sources logic.
     let related_sources = process_optional_vec(&payload.related_sources());
     let related_sources_str = related_sources.join(",");
     let term_ids: Vec<i32>;
@@ -257,3 +291,14 @@ pub async fn build_bridge_tables<T: CreateEntity>(
 
     Ok(())
 }
+
+
+/*
+Define new function here, though it will probably be a wrapper of the helper functions 
+I pull out of build_bridge_tables
+ */
+pub async fn build_bridge_tables(
+    payload: &CreateLink,
+    entity_type: &str,
+    db_pool: &PgPool,
+) -> Result<()> {
