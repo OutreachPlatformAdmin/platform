@@ -135,6 +135,32 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
+pub async fn update_bridge_table(
+    parent_entity_type: &str,
+    child_entity_type: &str,
+    parent_id: &i32,
+    child_ids: &Vec<i32>,
+    db_pool: &PgPool,
+) -> Result<()> {
+    let bridge_table: &str;
+    if let Some(inner_hashmap) = BRIDGE_TABLES.get(parent_entity_type) {
+        if let Some(table_name) = inner_hashmap.get(child_entity_type) {
+            bridge_table = table_name;
+            let insert_query_str = format!(
+                "INSERT INTO platform.{} ({}_id, {}_id) VALUES ($1, {})",
+                bridge_table, child_entity_type, parent_entity_type, parent_id
+            );
+            for child_id in child_ids {
+                sqlx::query(&insert_query_str)
+                    .bind(child_id)
+                    .execute(db_pool)
+                    .await?;
+            }
+        }
+    }
+    Ok(())
+}
+
 pub async fn build_bridge_tables<T: CreateEntity>(
     payload: &T,
     entity_type: &str,
@@ -159,7 +185,6 @@ pub async fn build_bridge_tables<T: CreateEntity>(
     let related_terms_str = related_terms.join(",");
     let related_topics = process_optional_vec(&payload.related_topics());
     let related_topics_str = related_topics.join(",");
-    // TODO: implement sources logic.
     let related_sources = process_optional_vec(&payload.related_sources());
     let related_sources_str = related_sources.join(",");
     let term_ids: Vec<i32>;
@@ -178,25 +203,9 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             term_ids = term_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("term") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (term_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for term_id in &term_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(term_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            update_bridge_table(entity_type, "term", &entity_row.id, &term_ids, db_pool).await?;
         }
     }
-    // TODO: probably should create another helper function since a lot of this logic is duplicated
     // TODO: add support for adding self-referential topics
     if !related_topics.is_empty() && entity_type != "topic" {
         if let Ok(topic_id_rows) = sqlx::query_as!(
@@ -208,22 +217,7 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             topic_ids = topic_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("topic") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (topic_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for topic_id in &topic_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(topic_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            update_bridge_table(entity_type, "topic", &entity_row.id, &topic_ids, db_pool).await?;
         }
     }
     if !related_sources.is_empty() && entity_type != "source" {
@@ -236,24 +230,9 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             source_ids = source_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("source") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (source_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for source_id in &source_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(source_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            update_bridge_table(entity_type, "source", &entity_row.id, &source_ids, db_pool)
+                .await?;
         }
     }
-
     Ok(())
 }
