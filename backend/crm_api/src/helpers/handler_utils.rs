@@ -206,22 +206,7 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             term_ids = term_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("term") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (term_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for term_id in &term_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(term_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            update_bridge_table(entity_type, "term", &entity_row.id, &term_ids, db_pool).await?;
         }
     }
     // TODO: probably should create another helper function since a lot of this logic is duplicated
@@ -236,22 +221,7 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             topic_ids = topic_id_rows.iter().map(|row| row.id).collect();
-            let bridge_table: &str;
-            if let Some(inner_hashmap) = BRIDGE_TABLES.get(entity_type) {
-                if let Some(table_name) = inner_hashmap.get("topic") {
-                    bridge_table = table_name;
-                    let insert_query_str = format!(
-                        "INSERT INTO platform.{} (topic_id, {}_id) VALUES ($1, {})",
-                        bridge_table, entity_type, entity_row.id
-                    );
-                    for topic_id in &topic_ids {
-                        sqlx::query(&insert_query_str)
-                            .bind(topic_id)
-                            .execute(db_pool)
-                            .await?;
-                    }
-                }
-            }
+            update_bridge_table(entity_type, "topic", &entity_row.id, &topic_ids, db_pool).await?;
         }
     }
     if !related_sources.is_empty() && entity_type != "source" {
