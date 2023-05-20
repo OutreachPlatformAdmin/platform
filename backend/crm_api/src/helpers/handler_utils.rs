@@ -135,9 +135,6 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
-/*
-let's assume the example code I took this from is parent_entity_type: topic, child_entity_type: source
- */
 pub async fn update_bridge_table(
     parent_entity_type: &str,
     child_entity_type: &str,
@@ -209,7 +206,6 @@ pub async fn build_bridge_tables<T: CreateEntity>(
             update_bridge_table(entity_type, "term", &entity_row.id, &term_ids, db_pool).await?;
         }
     }
-    // TODO: probably should create another helper function since a lot of this logic is duplicated
     // TODO: add support for adding self-referential topics
     if !related_topics.is_empty() && entity_type != "topic" {
         if let Ok(topic_id_rows) = sqlx::query_as!(
@@ -234,8 +230,6 @@ pub async fn build_bridge_tables<T: CreateEntity>(
         .await
         {
             source_ids = source_id_rows.iter().map(|row| row.id).collect();
-            // note: I'm not going to match on the error here, such that it will bubble up to the handler function.
-            // in the handler function I should match on the Result, and if error, return an error Response (Axum)
             update_bridge_table(entity_type, "source", &entity_row.id, &source_ids, db_pool)
                 .await?;
         }
