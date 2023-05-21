@@ -3,6 +3,7 @@ This file creates the routes.
 */
 
 mod hello_world;
+mod links;
 mod sources;
 mod terms;
 mod topics;
@@ -12,6 +13,7 @@ use axum::{
     Router,
 };
 use hello_world::hello_world;
+use links::new_link_handler;
 use sources::{get_all_sources_handler, get_source_handler, new_source_handler};
 use sqlx::postgres::PgPool;
 use terms::{
@@ -38,5 +40,6 @@ pub fn create_routes(db_pool: PgPool) -> Router {
         .route("/sources", get(get_all_sources_handler))
         .route("/new-source", post(new_source_handler))
         .route("/source", get(get_source_handler))
+        .route("/link-entities", post(new_link_handler))
         .with_state(app_state)
 }

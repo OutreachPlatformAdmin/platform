@@ -1,4 +1,4 @@
-use crate::helpers::handler_utils::build_bridge_tables;
+use crate::helpers::handler_utils::build_link_tables;
 use crate::helpers::shared_types::{CreateSource, ImageType, MediaType};
 use axum::{
     extract::State,
@@ -71,11 +71,12 @@ pub async fn new_source_handler(
     Json(payload): Json<CreateSource>,
 ) -> Response {
     let insert_result = insert_source(&payload, &db_pool).await;
-    // todo: update bridge tables when a new source is created as well
-    let _other_insert_result = build_bridge_tables(&payload, "source", &db_pool).await;
-    match insert_result {
-        Ok(_insert_result) => "new source created".into_response(),
-        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    let link_insert_result = build_link_tables(&payload, "source", &db_pool).await;
+    match (insert_result, link_insert_result) {
+        (Ok(_), Ok(_)) => "new source created".into_response(),
+        (Err(error), _) | (_, Err(error)) => {
+            (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response()
+        }
     }
 }
 
