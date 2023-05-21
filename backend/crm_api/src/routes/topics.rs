@@ -1,4 +1,4 @@
-use crate::helpers::handler_utils::{build_bridge_tables, insert_topic_or_term, CreateTopicOrTerm};
+use crate::helpers::handler_utils::{build_link_tables, insert_topic_or_term, CreateTopicOrTerm};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -69,10 +69,12 @@ pub async fn new_topic_handler(
 ) -> Response {
     let insert_result = insert_topic_or_term(&payload, "topic", &db_pool).await;
     // todo: look up how I can do error handling for both of these function calls since they both return Result
-    let _other_insert_result = build_bridge_tables(&payload, "topic", &db_pool).await;
-    match insert_result {
-        Ok(_insert_result) => "new topic created".into_response(),
-        Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
+    let link_insert_result = build_link_tables(&payload, "topic", &db_pool).await;
+    match (insert_result, link_insert_result) {
+        (Ok(_), Ok(_)) => "new topic created".into_response(),
+        (Err(error), _) | (_, Err(error)) => {
+            (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response()
+        }
     }
 }
 
