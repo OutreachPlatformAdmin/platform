@@ -1,18 +1,8 @@
 <script lang="ts">
-	import '../app.css';
-	// import '../app.postcss';
+	import '../app.postcss';
 	import { Menu } from 'lucide-svelte';
-
-	// Your selected Skeleton theme:
-	// import '@skeletonlabs/skeleton/themes/theme-skeleton.css';
-	// import '@skeletonlabs/skeleton/themes/theme-crimson.css';
-
-	// This contains the bulk of Skeletons required styles:
-	// NOTE: this will be renamed skeleton.css in the v2.x release.
+	import '@skeletonlabs/skeleton/themes/theme-crimson.css';
 	// import '@skeletonlabs/skeleton/styles/skeleton.css';
-
-	// Finally, your application's global stylesheet (sometimes labeled 'app.css')
-	// import '../app.postcss';
 </script>
 
 <nav class=" bg-slate-800 px-5 rounded-md lg:w-8/12 flex flex-row mx-auto">
