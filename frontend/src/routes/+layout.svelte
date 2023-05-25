@@ -1,8 +1,9 @@
 <script lang="ts">
-	import '../app.postcss';
-	import { Menu } from 'lucide-svelte';
 	import '@skeletonlabs/skeleton/themes/theme-crimson.css';
-	// import '@skeletonlabs/skeleton/styles/skeleton.css';
+	import '@skeletonlabs/skeleton/styles/skeleton.css';
+	import '../app.postcss';
+	import { LightSwitch } from '@skeletonlabs/skeleton';
+	import { Menu } from 'lucide-svelte';
 </script>
 
 <nav class=" bg-slate-800 px-5 rounded-md lg:w-8/12 flex flex-row mx-auto">
@@ -10,6 +11,9 @@
 		<li>
 			<a href="/" class="secondary"><Menu /></a>
 		</li>
+	</ul>
+	<ul>
+		<li><LightSwitch /></li>
 	</ul>
 	<ul>
 		<li class="text-3xl"><strong>Platform</strong></li>
