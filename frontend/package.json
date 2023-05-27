@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"lucide-svelte": "^0.130.1"
+		"lucide-svelte": "^0.130.1",
+		"svelte-icons": "^2.1.0"
 	}
 }
