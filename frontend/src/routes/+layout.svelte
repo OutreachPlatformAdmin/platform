@@ -2,21 +2,20 @@
 	import '@skeletonlabs/skeleton/themes/theme-crimson.css';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 
+	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
 	import { LightSwitch } from '@skeletonlabs/skeleton';
-	import { Menu } from 'lucide-svelte';
-	import TiThMenu from 'svelte-icons/ti/TiThMenu.svelte';
 	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 	import type { DrawerSettings } from '@skeletonlabs/skeleton';
+
+	import TiThMenu from 'svelte-icons/ti/TiThMenu.svelte';
 	import TiHome from 'svelte-icons/ti/TiHome.svelte';
-	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 
 	const drawerSettings: DrawerSettings = {
 		id: 'example-3',
 		// Provide your property overrides:
-		bgDrawer: 'bg-primary-800 text-white',
-		bgBackdrop: 'bg-gradient-to-tr from-secondary-800/50 via-primary-800/50 to-secondary-800/50',
+		bgDrawer: 'bg-primary-900',
+		bgBackdrop: 'bg-gradient-to-tr from-secondary-500/50 via-secondary-800/50 to-tertiary-500/50',
 		width: 'w-[280px] md:w-[480px]',
 		padding: 'p-4',
 		rounded: 'rounded-xl'
@@ -25,18 +24,9 @@
 	function openRightDrawer() {
 		drawerStore.open(drawerSettings);
 	}
-	// drawerStore.open(drawerSettings);
-	let valueSingle: string = 'books';
 </script>
 
-<Drawer position="right"
-	><ListBox>
-		<ListBoxItem bind:group={valueSingle} name="medium" value="books">Books</ListBoxItem>
-		<ListBoxItem bind:group={valueSingle} name="medium" value="movies">Movies</ListBoxItem>
-		<ListBoxItem bind:group={valueSingle} name="medium" value="tv">TV</ListBoxItem>
-	</ListBox></Drawer
->
-<AppShell regionPage="relative" slotPageHeader="sticky top-0 z-10">
+<AppShell regionPage="relative" slotHeader="sticky top-0 z-10">
 	<svelte:fragment slot="header">
 		<AppBar
 			gridColumns="grid-cols-3"
@@ -45,17 +35,14 @@
 			background="bg-primary-700"
 		>
 			<svelte:fragment slot="lead"
-				><div
-					class="w-10 hover:cursor-pointer"
-					on:click={openRightDrawer}
-					on:keypress={openRightDrawer}
-				>
-					<TiHome />
+				><div class="w-10 hover:cursor-pointer">
+					<a href="/"><TiHome /></a>
 				</div></svelte:fragment
 			>
 			Platform
-			<svelte:fragment slot="trail"
-				><div
+			<svelte:fragment slot="trail">
+				<LightSwitch />
+				<div
 					class="w-10 hover:cursor-pointer"
 					on:click={openRightDrawer}
 					on:keypress={openRightDrawer}
@@ -101,47 +88,93 @@
 			</nav></AppBar
 		> -->
 	</svelte:fragment>
-	<svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment>
-	<svelte:fragment slot="sidebarRight">Sidebar Right</svelte:fragment>
-	<svelte:fragment slot="pageHeader">Page Header</svelte:fragment>
+	<!-- <svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment> -->
+	<svelte:fragment slot="sidebarRight"
+		><Drawer position="right"
+			><nav class="list-nav">
+				<ul class="pt-5 px-2">
+					<li class="pb-1">
+						<a
+							href="/startHere"
+							class="variant-filled-success hover:variant-filled-secondary"
+							on:click={() => drawerStore.close()}
+						>
+							<span class="badge bg-secondary-500">🚩</span>
+							<span class="flex-auto">Start Here</span>
+						</a>
+					</li>
+					<li class="pb-1">
+						<a
+							href="/terms"
+							class="variant-filled-tertiary hover:variant-filled-secondary"
+							on:click={() => drawerStore.close()}
+						>
+							<span class="badge bg-primary-500">📄</span>
+							<span class="flex-auto">Terms</span>
+						</a>
+					</li>
+					<li class="pb-1">
+						<a
+							href="/CRM/CRMTerm"
+							class="variant-filled-tertiary hover:variant-filled-secondary"
+							on:click={() => drawerStore.close()}
+						>
+							<span class="badge bg-primary-500">👉</span>
+							<span class="flex-auto">CRM Term Entry</span>
+						</a>
+					</li>
+				</ul>
+			</nav></Drawer
+		></svelte:fragment
+	>
+	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
 	<!-- Router Slot -->
 	<slot />
 	<!-- ---- / ---- -->
-	<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment>
-	<svelte:fragment slot="footer">Footer</svelte:fragment>
+	<svelte:fragment slot="pageFooter"
+		><!-- Site footer -->
+		<footer class="bg-gray-800 p-5 grid grid-cols-3">
+			<div class="mb-10">
+				<h6 class="text-2xl">About</h6>
+				<p class="">
+					Thanks for checking out the site. Browse around areas of the website below and be sure to
+					spread the site to education and engage others.
+				</p>
+			</div>
+
+			<div class="mb-10">
+				<h6 class="text-2xl">Categories</h6>
+				<ul class="text-gray-500 indent-8">
+					<li class="list-none"><a href="/startHere">New? Start here</a></li>
+					<li class="list-none"><a href="/questions">Questions?</a></li>
+					<li class="list-none"><a href="/courses">Courses</a></li>
+					<li class="list-none"><a href="/myths-faq">Myths & FAQs</a></li>
+					<li class="list-none"><a href="/digital-tools">Digital Tool</a></li>
+					<li class="list-none"><a href="/research">Research & Resources</a></li>
+					<li class="list-none"><a href="/unions">Unions</a></li>
+					<li class="list-none"><a href="/policies">Policies</a></li>
+					<li class="list-none"><a href="/activism">Get Involved</a></li>
+					<li class="list-none"><a href="/readings">Readings & Theory</a></li>
+					<li class="list-none"><a href="/entertainment">Entertainment</a></li>
+					<li class="list-none"><a href="/health">Health & Lifestyle</a></li>
+				</ul>
+			</div>
+
+			<div class="mb-10">
+				<h6 class="text-2xl">Quick Links</h6>
+				<ul class="text-gray-500 indent-8">
+					<li class="list-none"><a href="http://scanfcode.com/about/">About Us</a></li>
+					<li class="list-none"><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+					<li class="list-none">
+						<a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a>
+					</li>
+					<li class="list-none">
+						<a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a>
+					</li>
+					<li class="list-none"><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+				</ul>
+			</div>
+		</footer></svelte:fragment
+	>
+	<!-- <svelte:fragment slot="footer" /> -->
 </AppShell>
-
-<!-- <nav class="bg-primary-700 px-5 rounded-md lg:w-8/12 flex flex-row mx-auto py-5">
-	<ul>
-		<li>
-			<a href="/" class="secondary"><Menu /></a>
-		</li>
-	</ul>
-	<ul>
-		<li><LightSwitch /></li>
-	</ul>
-	<ul>
-		<li class="text-3xl"><strong>Platform</strong></li>
-	</ul>
-	<ul class="flex ">
-		<li>
-			<a href="/startHere" role="button" class="bg-tertiary-100 text-primary-500 rounded p-2"
-				>Start Here</a
-			>
-		</li>
-		<li>
-			<a href="/terms" role="button" class="bg-lime-800 secondary text-white font-bold border-none"
-				>Terms</a
-			>
-		</li>
-		<li>
-			<a
-				href="/CRM/CRMTerm"
-				role="button"
-				class="bg-lime-800 secondary text-white font-bold border-none">CRM</a
-			>
-		</li>
-	</ul>
-</nav>
-
-<slot /> -->
