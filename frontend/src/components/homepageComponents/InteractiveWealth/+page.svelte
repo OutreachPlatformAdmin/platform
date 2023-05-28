@@ -13,7 +13,7 @@
 			Just keep scrolling, trust us! Take about 5 minutes to keep scrolling.
 		</h3>
 	</hgroup>
-	<div class="relative ">
+	<!-- <div class="relative ">
 		<figure>
 			<iframe
 				src="https://mkorostoff.github.io/1-pixel-wealth/"
@@ -27,5 +27,5 @@
 				>
 			</figcaption>
 		</figure>
-	</div>
+	</div> -->
 </section>
