@@ -7,14 +7,23 @@
 </script>
 
 <div>
-	<div class="pb-20">
+	<!-- <div class="pb-20">
 		{#each webpages as webpageObj}
 			<button class="tablink" title={webpageObj.name} on:click={() => loadPage(webpageObj)}
 				>{webpageObj.name}</button
 			>
 		{/each}
-	</div>
+	</div> -->
 
+	<div class="btn-group variant-filled w-full">
+		{#each webpages as webpageObj}
+			<button
+				title={webpageObj.name}
+				on:click={() => loadPage(webpageObj)}
+				class="w-full hover:variant-filled-primary">{webpageObj.name}</button
+			>
+		{/each}
+	</div>
 	<!-- Loaded component/webpage -->
 	<svelte:component this={selectedPage.component} props={selectedPage.props} />
 </div>

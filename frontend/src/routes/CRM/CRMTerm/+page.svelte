@@ -26,6 +26,35 @@
 </script>
 
 <h1 class="text-center my-5 text-3xl">CRM - Term</h1>
+<div class="input-group input-group-divider p-5">
+	<label class="label">
+		<span>Input</span>
+		<input class="input" type="text" placeholder="Input" />
+	</label>
+
+	<label class="label">
+		<span>Select</span>
+		<select class="select">
+			<option value="1">Option 1</option>
+			<option value="2">Option 2</option>
+			<option value="3">Option 3</option>
+			<option value="4">Option 4</option>
+			<option value="5">Option 5</option>
+		</select>
+	</label>
+
+	<label class="label">
+		<span>Textarea</span>
+		<textarea
+			class="textarea"
+			rows="4"
+			placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+		/>
+	</label>
+	<div class="input-group-shim">(segment)</div>
+	<input type="search" placeholder="Search..." />
+	<button class="variant-filled-secondary">Submit</button>
+</div>
 
 <form action="" class="border p-5 rounded border-lime-800">
 	<label for="briefDescription">Enter a brief description</label>

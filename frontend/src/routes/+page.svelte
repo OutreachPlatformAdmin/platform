@@ -22,10 +22,14 @@
 		>
 			People over profits
 		</h1>
-		<!-- <div class=" grid grid-cols-2"> -->
-		<!-- <a href="/startHere" class="w-full bg-sky-700" role="button">New? Start here!</a> -->
-		<a href="/startHere" class="w-full bg-green-700" role="button">Got Questions?</a>
-		<!-- </div> -->
+		<a
+			href="/startHere"
+			type="button"
+			class="btn variant-filled mb-5 hover:variant-filled-secondary"
+		>
+			<span class="badge bg-primary-500">❔</span>
+			<span class="flex-auto">Got Querstions? Start Here!</span>
+		</a>
 	</section>
 
 	<Tabs {webpages} />
