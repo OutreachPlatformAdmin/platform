@@ -51,42 +51,6 @@
 				</div></svelte:fragment
 			>
 		</AppBar>
-		<!-- <AppBar class="bg-primary-700"
-			><nav class="bg-primary-700 px-5 rounded-md flex flex-row mx-auto py-5">
-				<ul>
-					<li>
-						<a href="/" class="secondary"><Menu /></a>
-					</li>
-				</ul>
-				<ul>
-					<li><LightSwitch /></li>
-				</ul>
-				<ul>
-					<li class="text-3xl"><strong>Platform</strong></li>
-				</ul>
-				<ul class="flex ">
-					<li>
-						<a href="/startHere" role="button" class="bg-tertiary-100 text-primary-500 rounded p-2"
-							>Start Here</a
-						>
-					</li>
-					<li>
-						<a
-							href="/terms"
-							role="button"
-							class="bg-lime-800 secondary text-white font-bold border-none">Terms</a
-						>
-					</li>
-					<li>
-						<a
-							href="/CRM/CRMTerm"
-							role="button"
-							class="bg-lime-800 secondary text-white font-bold border-none">CRM</a
-						>
-					</li>
-				</ul>
-			</nav></AppBar
-		> -->
 	</svelte:fragment>
 	<!-- <svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment> -->
 	<svelte:fragment slot="sidebarRight"
@@ -129,7 +93,10 @@
 	>
 	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
 	<!-- Router Slot -->
-	<slot />
+	<div class="sm:mx-10 mx-5">
+		<slot />
+	</div>
+
 	<!-- ---- / ---- -->
 	<svelte:fragment slot="pageFooter"
 		><!-- Site footer -->
