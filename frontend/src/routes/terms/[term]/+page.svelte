@@ -6,7 +6,7 @@
 	import Examples from '../../../components/termComponents/TermExamples/+page.svelte';
 	import Resources from '../../../components/termComponents/TermResources/+page.svelte';
 
-	let term = $page.params.term;
+	let term = $page.params.term[0].toUpperCase() + $page.params.term.slice(1);
 
 	let propDetails = {
 		brief:
@@ -139,6 +139,6 @@
 </script>
 
 <div class="my-5">
-	<h2>{term}</h2>
+	<h2 class="my-5 text-4xl text-center">{term}</h2>
 	<Tabs {webpages} />
 </div>

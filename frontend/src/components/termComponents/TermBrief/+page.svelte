@@ -4,14 +4,14 @@
 	console.log(props.bulletPoints);
 </script>
 
-<div>
-	<div class="p-5 mb-5">
+<div class="m-5">
+	<div class="p-5 mb-5 border border-slate-900">
 		<h2 class="pb-2 border-b-[1px] mb-5 text-2xl">Brief Description</h2>
 		<p>
 			{@html html}
 		</p>
 	</div>
-	<div class="p-5 mb-10">
+	<div class="p-5 mb-10 border border-slate-900">
 		<h2 class="pb-2 text-2xl border-b-[1px] mb-8">Bullet Points</h2>
 		<ul class="grid grid-cols-2 gap-10">
 			{#each props.bulletPoints as point, index}

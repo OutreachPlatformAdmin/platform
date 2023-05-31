@@ -11,12 +11,12 @@
 	</hgroup>
 
 	<!-- Grid of categories -->
-	<div class="md:grid md:grid-cols-2 md:gap-16">
+	<div class="grid grid-cols-2 gap-16 my-10">
 		<!-- Courses -->
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-education.jpg"
 					alt="education category"
 				/>
@@ -45,7 +45,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-questions.jpg"
 					alt="education category"
 				/>
@@ -75,7 +75,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-digital-tools.jpg"
 					alt="education category"
 				/>
@@ -106,7 +106,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-research.jpg"
 					alt="education category"
 				/>
@@ -136,7 +136,27 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
+					src="/images/category-research.jpg"
+					alt="education category"
+				/>
+				<figcaption
+					class="absolute right-0 bottom-0 z-10 text-sky-100 bg-slate-900 px-2 rounded-tl-full pl-5 bg-opacity-90 text-xs"
+				>
+					Photo by <a
+						href="https://unsplash.com/@homajob?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+						class="text-sky-300 underline">Scott Graham</a
+					>
+					on
+					<a
+						href="https://unsplash.com/photos/5fNmWej4tAA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+						class="text-lime-300 underline">Unsplash</a
+					>
+				</figcaption>
+			</figure>
+			<!-- <figure class="relative">
+				<img
+					class="object-cover w-full rounded-xl"
 					src="/images/category-unions.jpg"
 					alt="education category"
 				/>
@@ -153,7 +173,7 @@
 						class="text-lime-300 underline">Unsplash</a
 					>
 				</figcaption>
-			</figure>
+			</figure> -->
 			<h4 class="text-center uppercase mt-5 text-5xl mb-10">Unions</h4>
 			<p class="text-center">
 				Learn why unions are so important, what your rights are, and how to use unions to improve
@@ -166,7 +186,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-policies.jpg"
 					alt="education category"
 				/>
@@ -195,7 +215,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-activism.jpg"
 					alt="education category"
 				/>
@@ -225,7 +245,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-readings.jpg"
 					alt="education category"
 				/>
@@ -255,7 +275,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-entertainment.jpg"
 					alt="education category"
 				/>
@@ -285,7 +305,7 @@
 		<div class="mb-10">
 			<figure class="relative">
 				<img
-					class="object-cover w-full h-[300px] rounded-xl"
+					class="object-cover w-full rounded-xl"
 					src="/images/category-health.jpg"
 					alt="education category"
 				/>
