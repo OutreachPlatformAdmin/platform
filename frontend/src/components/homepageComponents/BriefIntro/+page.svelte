@@ -1,5 +1,5 @@
 <!-- Welcome text and intro wealth inequality video -->
-<section class="">
+<section class="my-10">
 	<div>
 		<p class="my-5 indent-10">
 			Welcome to a platform for learning how the world works, what can be done about it, and how you
@@ -12,7 +12,7 @@
 		</p>
 	</div>
 	<!-- svelte-ignore a11y-media-has-caption -->
-	<!-- <div class="w-full flex justify-center my-10">
+	<div class="w-full flex justify-center my-10">
 		<iframe
 			class="w-full aspect-video max-w-4xl rounded-lg"
 			src="https://www.youtube.com/embed/uWSxzjyMNpU"
@@ -21,5 +21,5 @@
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 			allowfullscreen
 		/>
-	</div> -->
+	</div>
 </section>

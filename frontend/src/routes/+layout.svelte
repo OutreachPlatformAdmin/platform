@@ -35,15 +35,16 @@
 			background="bg-primary-700"
 		>
 			<svelte:fragment slot="lead"
-				><div class="w-10 hover:cursor-pointer">
+				><div class="w-10 hover:cursor-pointer variant-filled-primary">
 					<a href="/"><TiHome /></a>
 				</div></svelte:fragment
 			>
-			Platform
+			<h1 class="text-3xl ">Platform</h1>
+
 			<svelte:fragment slot="trail">
 				<LightSwitch />
 				<div
-					class="w-10 hover:cursor-pointer"
+					class="w-10 hover:cursor-pointer variant-filled-primary"
 					on:click={openRightDrawer}
 					on:keypress={openRightDrawer}
 				>
@@ -100,46 +101,47 @@
 	<!-- ---- / ---- -->
 	<svelte:fragment slot="pageFooter"
 		><!-- Site footer -->
-		<footer class="bg-gray-800 p-5 grid grid-cols-3">
+		<footer class="variant-filled-secondary p-5">
 			<div class="mb-10">
 				<h6 class="text-2xl">About</h6>
-				<p class="">
+				<p>
 					Thanks for checking out the site. Browse around areas of the website below and be sure to
 					spread the site to education and engage others.
 				</p>
 			</div>
+			<div class="grid grid-cols-2">
+				<div class="mb-10">
+					<h6 class="text-2xl">Categories</h6>
+					<ul class="indent-8">
+						<li class="list-none"><a href="/startHere">New? Start here</a></li>
+						<li class="list-none"><a href="/questions">Questions?</a></li>
+						<li class="list-none"><a href="/courses">Courses</a></li>
+						<li class="list-none"><a href="/myths-faq">Myths & FAQs</a></li>
+						<li class="list-none"><a href="/digital-tools">Digital Tool</a></li>
+						<li class="list-none"><a href="/research">Research & Resources</a></li>
+						<li class="list-none"><a href="/unions">Unions</a></li>
+						<li class="list-none"><a href="/policies">Policies</a></li>
+						<li class="list-none"><a href="/activism">Get Involved</a></li>
+						<li class="list-none"><a href="/readings">Readings & Theory</a></li>
+						<li class="list-none"><a href="/entertainment">Entertainment</a></li>
+						<li class="list-none"><a href="/health">Health & Lifestyle</a></li>
+					</ul>
+				</div>
 
-			<div class="mb-10">
-				<h6 class="text-2xl">Categories</h6>
-				<ul class="text-gray-500 indent-8">
-					<li class="list-none"><a href="/startHere">New? Start here</a></li>
-					<li class="list-none"><a href="/questions">Questions?</a></li>
-					<li class="list-none"><a href="/courses">Courses</a></li>
-					<li class="list-none"><a href="/myths-faq">Myths & FAQs</a></li>
-					<li class="list-none"><a href="/digital-tools">Digital Tool</a></li>
-					<li class="list-none"><a href="/research">Research & Resources</a></li>
-					<li class="list-none"><a href="/unions">Unions</a></li>
-					<li class="list-none"><a href="/policies">Policies</a></li>
-					<li class="list-none"><a href="/activism">Get Involved</a></li>
-					<li class="list-none"><a href="/readings">Readings & Theory</a></li>
-					<li class="list-none"><a href="/entertainment">Entertainment</a></li>
-					<li class="list-none"><a href="/health">Health & Lifestyle</a></li>
-				</ul>
-			</div>
-
-			<div class="mb-10">
-				<h6 class="text-2xl">Quick Links</h6>
-				<ul class="text-gray-500 indent-8">
-					<li class="list-none"><a href="http://scanfcode.com/about/">About Us</a></li>
-					<li class="list-none"><a href="http://scanfcode.com/contact/">Contact Us</a></li>
-					<li class="list-none">
-						<a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a>
-					</li>
-					<li class="list-none">
-						<a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a>
-					</li>
-					<li class="list-none"><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
-				</ul>
+				<div class="mb-10">
+					<h6 class="text-2xl">Quick Links</h6>
+					<ul class="indent-8">
+						<li class="list-none"><a href="http://scanfcode.com/about/">About Us</a></li>
+						<li class="list-none"><a href="http://scanfcode.com/contact/">Contact Us</a></li>
+						<li class="list-none">
+							<a href="http://scanfcode.com/contribute-at-scanfcode/">Contribute</a>
+						</li>
+						<li class="list-none">
+							<a href="http://scanfcode.com/privacy-policy/">Privacy Policy</a>
+						</li>
+						<li class="list-none"><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
+					</ul>
+				</div>
 			</div>
 		</footer></svelte:fragment
 	>

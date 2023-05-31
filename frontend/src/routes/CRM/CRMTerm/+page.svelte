@@ -58,10 +58,10 @@
 
 <form action="" class="border p-5 rounded border-lime-800">
 	<label for="briefDescription">Enter a brief description</label>
-	<textarea type="text" name="briefDescription" class="h-36 mb-5" />
+	<textarea name="briefDescription" class="h-36 mb-5" />
 
 	<label for="fullDescription">Enter a full description</label>
-	<textarea type="text" name="fullDescription" class="h-36 mb-5" />
+	<textarea name="fullDescription" class="h-36 mb-5" />
 
 	<div class="">
 		<div class="">
@@ -108,15 +108,18 @@
 	</div>
 	<div class="grid grid-cols-3">
 		<div>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label>Added bullet points</label>
 			<ul id="bulletPointResults" />
 		</div>
 
 		<div>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label>Example results</label>
 			<ul id="exampleResults" />
 		</div>
 		<div>
+			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label>Parallel results</label>
 			<ul id="parallelResults" />
 		</div>

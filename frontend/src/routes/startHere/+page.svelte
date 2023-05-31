@@ -182,7 +182,7 @@
 	</p>
 	<!-- svelte-ignore a11y-no-redundant-roles -->
 	<ol role="list">
-		<li class="my-5 rounded-lg bg-slate-800 p-5">
+		<li class="my-5 rounded-lg variant-filled-primary p-5">
 			<h3 class="text-3xl my-5">1. Understand these topics</h3>
 			<p class="indent-10">
 				Before trying to enact change, familiarize yourself with some of the core ideas. We suggest
@@ -191,7 +191,7 @@
 				on your own.
 			</p>
 		</li>
-		<li class="my-5 rounded-lg bg-slate-800 p-5">
+		<li class="my-5 rounded-lg variant-filled p-5">
 			<h3 class="text-3xl my-5">2. Spread the message</h3>
 			<p class="indent-10">
 				There is a large stigma against anything that isn't the status quo, i.e. Capitalism. We need
@@ -200,18 +200,18 @@
 				organizations, such as city council, to give us a louder voice.
 			</p>
 		</li>
-		<li class="my-5 rounded-lg bg-slate-800 p-5">
+		<li class="my-5 rounded-lg variant-filled-primary p-5">
 			<h3 class="text-3xl my-5">3. Unionize your workplace</h3>
 			<p>
 				Once you have a fundamental understanding of how to safely unionize, and what makes a good
 				union, you should start the process of unionizing your workplace.
 			</p>
 		</li>
-		<li class="my-5 rounded-lg bg-slate-800 p-5">
+		<li class="my-5 rounded-lg variant-filled p-5">
 			<h3 class="text-3xl my-5">4. Volunteer for political campaigns</h3>
 			<p>Help out others who are trying to represent us in government.</p>
 		</li>
-		<li class="my-5 rounded-lg bg-slate-800 p-5">
+		<li class="my-5 rounded-lg variant-filled-primary p-5">
 			<h3 class="text-3xl my-5">5. Run for a political position</h3>
 			<p>
 				Finally, you can run for any political position that is not currently represented by a

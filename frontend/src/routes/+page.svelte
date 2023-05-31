@@ -37,14 +37,14 @@
 	<Categories />
 
 	<!-- Feedback and donation -->
-	<section>
-		<div class="flex justify-around mb-10">
+	<section class="my-10">
+		<div class="flex justify-between mb-10">
 			<p class="text-xl">Want to contribute to the website? Get in touch here.</p>
-			<a href="/" role="button" class="bg-sky-600 border-sky-950">Get In Touch</a>
+			<a href="/" role="button" class="btn variant-filled-primary w-40 mx-5">Get In Touch</a>
 		</div>
-		<div class="flex justify-around">
+		<div class="flex justify-between">
 			<p class="text-xl">Want to donate to the website? Use the button to help out</p>
-			<a href="/" role="button" class="bg-lime-600 border-green-950">Donate</a>
+			<a href="/" role="button" class="btn variant-filled-secondary w-40 mx-5">Donate</a>
 		</div>
 	</section>
 </header>
