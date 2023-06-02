@@ -6,7 +6,7 @@
 	const loadPage = (obj: any) => (selectedPage = obj);
 </script>
 
-<div>
+<div class="my-5">
 	<!-- <div class="pb-20">
 		{#each webpages as webpageObj}
 			<button class="tablink" title={webpageObj.name} on:click={() => loadPage(webpageObj)}
