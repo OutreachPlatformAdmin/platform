@@ -3,7 +3,7 @@
 ## Singular Record Endpoints 
 
 ### `/topic`
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns a single topic record.
 
 #### Parameters
@@ -15,7 +15,7 @@ Returns a single topic record.
 `/topic?id=1`
 
 ### `/term`
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns a single term record.
 
 #### Parameters
@@ -27,7 +27,7 @@ Returns a single term record.
 `/term?id=1`
 
 ### `/source`
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns a single source record. 
 
 #### Parameters
@@ -41,21 +41,21 @@ Returns a single source record.
 ## Multiple Record Endpoints
 
 ### `/topics`
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns all available topics.
 
 ### `/terms`
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns all available terms.
 
 ### `/sources` 
-*HTTP Type:* GET
+**HTTP Type:** GET
 Returns all available sources.
 
 ## Relational Endpoints
 
 ### `/terms-from-topic`
-*HTTP Type:* GET
+**HTTP Type:** GET
 
 Returns all of the terms related to a given topic.
 
@@ -71,7 +71,7 @@ Returns all of the terms related to a given topic.
 
 ### `/new-topic`
 
-*HTTP Type:* POST
+**HTTP Type:** POST
 
 #### POST Body Parameters
 
@@ -96,7 +96,7 @@ Returns all of the terms related to a given topic.
 See `/new-term` example usage.
 
 ### `/new-term`
-*HTTP Type:* POST
+**HTTP Type:** POST
 
 #### POST Body Parameters
 
@@ -132,7 +132,7 @@ BODY:
 
 ### `/new-source` 
 
-*HTTP Type:* POST
+**HTTP Type:** POST
 
 #### Parameters
 
@@ -142,7 +142,7 @@ BODY:
 
 ### `/link-entities`
 
-*HTTP Type:* POST
+**HTTP Type:** POST
 Link two entities that already exist in the database.
 
 #### POST Body Parameters
