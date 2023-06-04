@@ -6,7 +6,7 @@
 
 Returns a single topic record.
 
-### Parameters
+#### Parameters
 
 `id`: int, topic id.
 
@@ -18,7 +18,7 @@ Returns a single topic record.
 
 Returns a single term record.
 
-### Parameters
+#### Parameters
 
 `id`: int, term id.
 
@@ -30,7 +30,7 @@ Returns a single term record.
 
 Returns a single source record. 
 
-### Parameters
+#### Parameters
 
 `id`: int, source id.
 
@@ -58,7 +58,7 @@ Returns all available sources.
 
 Returns all of the terms related to a given topic.
 
-### Parameters
+#### Parameters
 
 `topic`: string
 
@@ -128,7 +128,7 @@ BODY:
 
 ### `/new-source` 
 
-### Parameters
+#### Parameters
 
 #### Example Usage 
 
@@ -138,7 +138,7 @@ BODY:
 
 Link two entities that already exist in the database.
 
-### POST Body Parameters
+#### POST Body Parameters
 
 `parent_entity_type`: string, must be an existing entity type, e.g. `topic`
 `child_entity_type`: string, must be an existing entity type, e.g. `term`
