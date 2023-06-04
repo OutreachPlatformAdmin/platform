@@ -85,7 +85,7 @@ Returns all of the terms related to a given topic.
 
 #### Example output
 
-### Entity Creation Endpoints
+## Entity Creation Endpoints
 
 ### `/new-topic`
 
