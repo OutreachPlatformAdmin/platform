@@ -72,21 +72,21 @@ Returns all of the terms related to a given topic.
 
 #### POST Body Parameters
 
-`name`: string
-`is_verified`: bool
-`brief_description`: string, optional
-`full_description`: string, optional
-`bullet_points`: string[], optional
-`examples`: string[], optional
-`parallels`: string[], optional
-`ai_brief_description`: string, optional
-`ai_full_description`: string, optional
-`ai_bullet_points`: string[], optional
-`ai_parallels`: string[], optional
-`ai_examples`: string[], optional
-`related_terms`: string[], optional
-`related_topics`: string[], optional
-`related_sources`: string[], optional
+`name`: string  
+`is_verified`: bool  
+`brief_description`: string, optional  
+`full_description`: string, optional  
+`bullet_points`: string[], optional  
+`examples`: string[], optional  
+`parallels`: string[], optional  
+`ai_brief_description`: string, optional  
+`ai_full_description`: string, optional  
+`ai_bullet_points`: string[], optional  
+`ai_parallels`: string[], optional  
+`ai_examples`: string[], optional  
+`related_terms`: string[], optional  
+`related_topics`: string[], optional  
+`related_sources`: string[], optional  
 
 #### Example Usage 
 
@@ -96,21 +96,21 @@ See `/new-term` example usage.
 
 #### POST Body Parameters
 
-`name`: string
-`is_verified`: bool
-`brief_description`: string, optional
-`full_description`: string, optional
-`bullet_points`: string[], optional
-`examples`: string[], optional
-`parallels`: string[], optional
-`ai_brief_description`: string, optional
-`ai_full_description`: string, optional
-`ai_bullet_points`: string[], optional
-`ai_parallels`: string[], optional
-`ai_examples`: string[], optional
-`related_terms`: string[], optional
-`related_topics`: string[], optional
-`related_sources`: string[], optional
+`name`: string  
+`is_verified`: bool  
+`brief_description`: string, optional  
+`full_description`: string, optional  
+`bullet_points`: string[], optional  
+`examples`: string[], optional  
+`parallels`: string[], optional  
+`ai_brief_description`: string, optional  
+`ai_full_description`: string, optional  
+`ai_bullet_points`: string[], optional  
+`ai_parallels`: string[], optional  
+`ai_examples`: string[], optional  
+`related_terms`: string[], optional  
+`related_topics`: string[], optional  
+`related_sources`: string[], optional  
 
 #### Example Usage 
 
