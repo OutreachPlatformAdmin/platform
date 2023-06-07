@@ -32,23 +32,4 @@
 	* {
 		box-sizing: border-box;
 	}
-
-	/* Style tab links */
-	.tablink {
-		background-color: #555;
-		color: white;
-		float: left;
-		border: none;
-		outline: none;
-		border: 0.5px solid #444;
-		border-radius: 0;
-		cursor: pointer;
-		padding: 14px 16px;
-		font-size: 17px;
-		width: 25%;
-	}
-
-	.tablink:hover {
-		background-color: #777;
-	}
 </style>

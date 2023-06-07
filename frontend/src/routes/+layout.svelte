@@ -39,7 +39,7 @@
 					<a href="/"><TiHome /></a>
 				</div></svelte:fragment
 			>
-			<h1 class="text-3xl ">Platform</h1>
+			<h1 class="text-3xl text-white">Platform</h1>
 
 			<svelte:fragment slot="trail">
 				<LightSwitch />
