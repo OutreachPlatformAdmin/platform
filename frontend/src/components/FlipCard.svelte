@@ -5,12 +5,12 @@
 
 <div class="flip-card bg-transparent w-[300px] h-[300px]">
 	<div class="flip-card-inner relative w-full h-full text-center rounded-lg">
-		<div class="flip-card-front absolute w-full h-full bg-sky-700 rounded-lg">
+		<div class="flip-card-front absolute w-full h-full variant-filled-primary rounded-lg">
 			<p class="p-5">
 				{question}
 			</p>
 		</div>
-		<div class="flip-card-back w-full h-full absolute bg-lime-700 rounded-lg">
+		<div class="flip-card-back w-full h-full absolute variant-filled-success rounded-lg">
 			<p class="p-5">{answer}</p>
 		</div>
 	</div>

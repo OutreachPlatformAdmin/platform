@@ -1,5 +1,5 @@
 <!-- Interactive wealth inequality -->
-<section>
+<section class="my-10">
 	<hgroup>
 		<h2 class="text-3xl pb-10">Would taxing the richest handful of billionaires solve anything?</h2>
 		<h3 class="indent-10">
@@ -13,7 +13,7 @@
 			Just keep scrolling, trust us! Take about 5 minutes to keep scrolling.
 		</h3>
 	</hgroup>
-	<!-- <div class="relative ">
+	<div class="relative bg-white">
 		<figure>
 			<iframe
 				src="https://mkorostoff.github.io/1-pixel-wealth/"
@@ -21,11 +21,11 @@
 				class="w-full my-10 rounded-lg"
 				title="Wealth visualized"
 			/>
-			<figcaption class="absolute right-5 bottom-10">
+			<figcaption class="absolute right-5 bottom-0">
 				<a href="https://mkorostoff.github.io/1-pixel-wealth/"
 					>https://mkorostoff.github.io/1-pixel-wealth</a
 				>
 			</figcaption>
 		</figure>
-	</div> -->
+	</div>
 </section>

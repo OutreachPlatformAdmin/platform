@@ -15,7 +15,9 @@ module.exports = {
 		// 	sans: [...defaultTheme.fontFamily.sans]
 		// },
 	},
-	plugins: [...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()]
+	plugins: [
+		require('@tailwindcss/forms'), ,
+		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')()]
 };
 
 module.exports = config;

@@ -27,8 +27,8 @@
 	];
 </script>
 
-<div class="">
-	<section class="grid lg:grid-cols-3 grid-cols-2 gap-5 p-2">
+<div class="my-10">
+	<section class="grid lg:grid-cols-3 sm:grid-cols-2 gap-5 p-2">
 		{#each cards as { question, answer }}
 			<FlipCard {question} {answer} />
 		{/each}
