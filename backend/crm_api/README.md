@@ -2,6 +2,9 @@
 
 * uses Axum as a web application framework (API Server)
 
+# Endpoint Definitions & Usage 
+
+Please see the [README](src/routes/README.md) within the `src/routes` directory.
 
 
 # Rust / Axum Setup
