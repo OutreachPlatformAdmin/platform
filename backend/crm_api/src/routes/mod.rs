@@ -7,6 +7,7 @@ mod links;
 mod sources;
 mod terms;
 mod topics;
+use axum::http::Method;
 use axum::{
     extract::FromRef,
     routing::{get, post},
@@ -20,6 +21,7 @@ use terms::{
     get_all_terms_for_topic_handler, get_all_terms_handler, get_term_handler, new_term_handler,
 };
 use topics::{get_all_topics_handler, get_topic_handler, new_topic_handler};
+use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Clone, FromRef)]
 pub struct AppState {
@@ -28,6 +30,12 @@ pub struct AppState {
 
 pub fn create_routes(db_pool: PgPool) -> Router {
     let app_state: AppState = AppState { db_pool };
+
+    // Cors settings for all routes
+    let cors = CorsLayer::new()
+        .allow_methods([Method::GET, Method::POST])
+        .allow_origin(Any);
+
     Router::new()
         .route("/", get(hello_world))
         .route("/topics", get(get_all_topics_handler))
@@ -41,5 +49,6 @@ pub fn create_routes(db_pool: PgPool) -> Router {
         .route("/new-source", post(new_source_handler))
         .route("/source", get(get_source_handler))
         .route("/link-entities", post(new_link_handler))
+        .layer(cors)
         .with_state(app_state)
 }
