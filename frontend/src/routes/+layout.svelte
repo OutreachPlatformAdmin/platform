@@ -10,6 +10,19 @@
 
 	import TiThMenu from 'svelte-icons/ti/TiThMenu.svelte';
 	import TiHome from 'svelte-icons/ti/TiHome.svelte';
+	import MdCallReceived from 'svelte-icons/md/MdCallReceived.svelte'
+
+	import { footerNav } from '../stores';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		footerNav.update([
+			{
+				link: "www.typescriptlank.org",
+				
+			}
+		])
+	})
 
 	const drawerSettings: DrawerSettings = {
 		id: 'example-3',
@@ -94,22 +107,52 @@
 	>
 	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
 	<!-- Router Slot -->
-	<div class="sm:mx-10 mx-5">
+	<div class="sm:mx-10 mx-5 h-screen overflow-auto">
 		<slot />
 	</div>
 
 	<!-- ---- / ---- -->
 	<svelte:fragment slot="pageFooter"
 		><!-- Site footer -->
-		<footer class="variant-filled-secondary p-5">
-			<div class="mb-10">
+		<footer class="variant-filled-secondary fixed bottom-0 z-50 w-full">
+			<AppBar
+			gridColumns="grid-cols-4"
+			slotDefault="place-self-center"
+			slotTrail="place-content-end"
+			background="bg-primary-700"
+		>
+			<ul>
+				{#each $footerNav as item}
+					<li>{item}</li>
+				{/each}
+			
+			</ul>
+			<!-- <svelte:fragment slot="lead"
+				><div class="w-10 hover:cursor-pointer variant-filled-primary">
+					<a href="/"><TiHome /></a>
+				</div></svelte:fragment
+			>
+			<h1 class="text-3xl text-white">Platform</h1> -->
+
+			<!-- <svelte:fragment slot="trail">
+				<LightSwitch />
+				<div
+					class="w-10 hover:cursor-pointer variant-filled-primary"
+					on:click={openRightDrawer}
+					on:keypress={openRightDrawer}
+				>
+					<TiThMenu />
+				</div></svelte:fragment
+			> -->
+		</AppBar>
+			<!-- <div class="mb-10">
 				<h6 class="text-2xl">About</h6>
 				<p>
 					Thanks for checking out the site. Browse around areas of the website below and be sure to
 					spread the site to education and engage others.
 				</p>
-			</div>
-			<div class="grid grid-cols-2">
+			</div> -->
+			<!-- <div class="grid grid-cols-2">
 				<div class="mb-10">
 					<h6 class="text-2xl">Categories</h6>
 					<ul class="indent-8">
@@ -142,7 +185,7 @@
 						<li class="list-none"><a href="http://scanfcode.com/sitemap/">Sitemap</a></li>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 		</footer></svelte:fragment
 	>
 	<!-- <svelte:fragment slot="footer" /> -->
