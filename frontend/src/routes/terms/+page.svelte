@@ -7,14 +7,13 @@
 	};
 </script>
 
-<button on:click={getTerms}>Get terms</button>
+<button class="" on:click={getTerms}>Get terms</button>
 
-<nav class="list-nav my-10 grid grid-cols-2">
-	<ul>
+	<ul class="grid grid-cols-2 w-screen gap-3 mt-10">
 		{#each terms as term}
-			<li>
-				<a href="/terms/{term}" class="flex-auto">{term}</a>
+			<li class="m-5">
+				<a href="/terms/{term}" class="p-5 bg-slate-800 rounded-2xl hover:pointer">{term}</a>
 			</li>
 		{/each}
 	</ul>
-</nav>
+

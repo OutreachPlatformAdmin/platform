@@ -16,12 +16,12 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		footerNav.update([
-			{
-				link: "www.typescriptlank.org",
+		// footerNav.update([
+		// 	{
+		// 		link: "www.typescriptlank.org",
 				
-			}
-		])
+		// 	}
+		// ])
 	})
 
 	const drawerSettings: DrawerSettings = {
