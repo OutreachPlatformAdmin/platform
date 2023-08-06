@@ -24,10 +24,29 @@ pub struct CreateTopicOrTerm {
 }
 
 #[derive(Deserialize, FromRow)]
+pub struct UpdateTopicOrTerm {
+    id: i32,
+    name: Option<String>,
+    is_verified: Option<bool>,
+    brief_description: Option<String>,
+    full_description: Option<String>,
+    bullet_points: Option<Vec<String>>,
+    examples: Option<Vec<String>>,
+    parallels: Option<Vec<String>>,
+    ai_brief_description: Option<String>,
+    ai_full_description: Option<String>,
+    ai_bullet_points: Option<Vec<String>>,
+    ai_parallels: Option<Vec<String>>,
+    ai_examples: Option<Vec<String>>,
+    related_terms: Option<Vec<String>>,
+    related_topics: Option<Vec<String>>,
+    related_sources: Option<Vec<String>>,
+}
+
+#[derive(Deserialize, FromRow)]
 pub struct IdRow {
     id: i32,
 }
-
 
 pub trait CreateEntity {
     fn name(&self) -> &String;
@@ -136,6 +155,46 @@ pub async fn insert_topic_or_term(
     Ok(())
 }
 
+/*
+I need to create an UPDATE SQL statement that optionally takes a bunch of parameters...
+*/
+pub async fn update_topic_or_term(
+    payload: &CreateTopicOrTerm,
+    topic_or_term: &str,
+    db_pool: &PgPool,
+) -> Result<()> {
+    let bullet_points = process_optional_vec(&payload.bullet_points);
+    let examples = process_optional_vec(&payload.examples);
+    let parallels = process_optional_vec(&payload.parallels);
+    let ai_bullet_points = process_optional_vec(&payload.ai_bullet_points);
+    let ai_parallels = process_optional_vec(&payload.ai_parallels);
+    let ai_examples = process_optional_vec(&payload.ai_examples);
+
+    let query_string = format!("INSERT INTO platform.{}s ({}, is_verified, brief_description, full_description, 
+        bullet_points, examples, parallels, ai_brief_description, ai_full_description, ai_bullet_points, ai_parallels, 
+        ai_examples) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", topic_or_term, topic_or_term);
+
+    let _insert_result = sqlx::query(&query_string)
+        .bind(&payload.name)
+        .bind(&payload.is_verified)
+        .bind(&payload.brief_description)
+        .bind(&payload.full_description)
+        .bind(bullet_points.as_slice())
+        .bind(examples.as_slice())
+        .bind(parallels.as_slice())
+        .bind(&payload.ai_brief_description)
+        .bind(&payload.ai_full_description)
+        .bind(ai_bullet_points.as_slice())
+        .bind(ai_parallels.as_slice())
+        .bind(ai_examples.as_slice())
+        .execute(db_pool)
+        .await;
+
+    Ok(())
+}
+
+
+
 pub async fn update_link_table(
     parent_entity_type: &str,
     child_entity_type: &str,
@@ -231,8 +290,7 @@ pub async fn build_link_tables<T: CreateEntity>(
         .await
         {
             source_ids = source_id_rows.iter().map(|row| row.id).collect();
-            update_link_table(entity_type, "source", &entity_row.id, &source_ids, db_pool)
-                .await?;
+            update_link_table(entity_type, "source", &entity_row.id, &source_ids, db_pool).await?;
         }
     }
     Ok(())

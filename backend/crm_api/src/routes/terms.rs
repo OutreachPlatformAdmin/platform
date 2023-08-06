@@ -1,4 +1,7 @@
-use crate::helpers::handler_utils::{build_link_tables, insert_topic_or_term, CreateTopicOrTerm};
+use crate::helpers::handler_utils::{
+    build_link_tables, insert_topic_or_term, update_topic_or_term, CreateTopicOrTerm,
+    UpdateTopicOrTerm,
+};
 use axum::{
     extract::State,
     http::StatusCode,
@@ -13,6 +16,23 @@ pub struct Term {
     id: i32,
     term: String,
     is_verified: bool,
+    brief_description: Option<String>,
+    full_description: Option<String>,
+    bullet_points: Option<Vec<String>>,
+    examples: Option<Vec<String>>,
+    parallels: Option<Vec<String>>,
+    ai_brief_description: Option<String>,
+    ai_full_description: Option<String>,
+    ai_bullet_points: Option<Vec<String>>,
+    ai_parallels: Option<Vec<String>>,
+    ai_examples: Option<Vec<String>>,
+}
+
+#[derive(Serialize, Deserialize, FromRow)]
+pub struct UpdateTermData {
+    id: i32,
+    term: Option<String>,
+    is_verified: Option<bool>,
     brief_description: Option<String>,
     full_description: Option<String>,
     bullet_points: Option<Vec<String>>,
@@ -132,4 +152,18 @@ pub async fn get_term(db_pool: &PgPool, id: &i32) -> Result<Term> {
         .fetch_one(db_pool)
         .await?;
     Ok(term)
+}
+
+// this should be a PUT endpoint
+pub async fn update_term_handler(
+    State(db_pool): State<PgPool>,
+    Json(payload): Json<UpdateTopicOrTerm>,
+) -> Response {
+    let update_result = update_topic_or_term(&payload, "term", &db_pool).await;
+    match (insert_result, link_insert_result) {
+        (Ok(_), Ok(_)) => "new term created".into_response(),
+        (Err(error), _) | (_, Err(error)) => {
+            (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response()
+        }
+    }
 }
